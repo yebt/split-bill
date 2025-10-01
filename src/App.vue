@@ -7,6 +7,7 @@ import { RouterLink, RouterView } from 'vue-router'
     <header>
       <RouterLink to="/">Home</RouterLink>
       <RouterLink to="/about">About</RouterLink>
+      <div class="i-lucide:receipt" />
     </header>
     <RouterView />
   </main>
