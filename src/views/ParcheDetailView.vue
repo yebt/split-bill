@@ -74,8 +74,18 @@
       </div>
 
       <!-- People & Groups Tab -->
-      <div v-if="activeTab === 'people'" class="space-y-6 flex flex-col gap-4">
-        <div class="flex justify-end">
+      <div v-if="activeTab === 'people'" class="space-y-4">
+        <div class="flex justify-between items-center">
+          <div class="flex gap-2">
+            <BaseButton variant="ghost" size="sm" @click="expandAllGroups">
+              <div class="i-lucide-chevrons-down text-lg" />
+              Expand All
+            </BaseButton>
+            <BaseButton variant="ghost" size="sm" @click="collapseAllGroups">
+              <div class="i-lucide-chevrons-up text-lg" />
+              Collapse All
+            </BaseButton>
+          </div>
           <BaseButton @click="showAddGroupModal = true">
             <div class="i-lucide-plus text-lg" />
             Add Group
@@ -83,27 +93,25 @@
         </div>
 
         <div v-for="group in parche.groups" :key="group.id" class="space-y-3">
-          <BaseCard>
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-3">
-                <div class="w-4 h-4 rounded-full" :style="{ backgroundColor: group.color }" />
-                <h3 class="text-lg font-semibold">{{ group.name }}</h3>
-                <span class="text-sm text-gray-500 dark:text-gray-400">({{ group.people.length }})</span>
-              </div>
-              <div class="flex gap-2">
-                <BaseButton variant="ghost" size="sm" @click="openEditGroup(group.id)">
-                  <div class="i-lucide-edit text-lg" />
-                </BaseButton>
-                <BaseButton
-                  v-if="parche.groups.length > 1"
-                  variant="ghost"
-                  size="sm"
-                  @click="confirmDeleteGroup(group.id)"
-                >
-                  <div class="i-lucide-trash text-lg" />
-                </BaseButton>
-              </div>
-            </div>
+          <BaseAccordion
+            v-model="groupExpandedState[group.id]"
+            :title="group.name"
+            :color="group.color"
+            :badge="group.people.length"
+          >
+            <template #actions>
+              <BaseButton variant="ghost" size="sm" @click.stop="openEditGroup(group.id)">
+                <div class="i-lucide-edit text-lg text-white" />
+              </BaseButton>
+              <BaseButton
+                v-if="parche.groups.length > 1"
+                variant="ghost"
+                size="sm"
+                @click.stop="confirmDeleteGroup(group.id)"
+              >
+                <div class="i-lucide-trash text-lg text-white" />
+              </BaseButton>
+            </template>
 
             <!-- People in Group -->
             <div class="space-y-2">
@@ -146,7 +154,7 @@
                 Add Person
               </BaseButton>
             </div>
-          </BaseCard>
+          </BaseAccordion>
         </div>
       </div>
 
@@ -249,7 +257,7 @@
             autofocus
             :error="groupError"
           />
-          <ColorPicker v-model="newGroupColor" label="Group Color" />
+          <ColorPicker v-model="newGroupColor" label="Group Color (Optional - Random if empty)" />
         </div>
       </form>
       <template #footer>
@@ -365,9 +373,10 @@ import { useRouter, useRoute } from 'vue-router'
 import { useParcheStore } from '@/stores/parcheStore'
 import { useBillStore } from '@/stores/billStore'
 import { useThemeStore } from '@/stores/themeStore'
-import { GROUP_COLORS } from '@/types/domain'
+import { getRandomUnusedColor } from '@/types/domain'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
+import BaseAccordion from '@/components/BaseAccordion.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import ColorPicker from '@/components/ColorPicker.vue'
@@ -381,11 +390,14 @@ const themeStore = useThemeStore()
 
 const activeTab = ref<'people' | 'bills' | 'summary'>('people')
 
+// Group accordion state
+const groupExpandedState = ref<Record<string, boolean>>({})
+
 // Group modals
 const showAddGroupModal = ref(false)
 const showEditGroupModal = ref(false)
 const newGroupName = ref('')
-const newGroupColor = ref(GROUP_COLORS[0])
+const newGroupColor = ref('')
 const editGroupName = ref('')
 const editGroupColor = ref('')
 const selectedGroupId = ref<string | null>(null)
@@ -427,6 +439,13 @@ const totalAmount = computed(() => {
 onMounted(() => {
   const id = route.params.id as string
   parcheStore.setCurrentParche(id)
+
+  // Initialize all groups as expanded
+  if (parche.value) {
+    parche.value.groups.forEach(group => {
+      groupExpandedState.value[group.id] = true
+    })
+  }
 })
 
 function formatDate(dateString: string) {
@@ -434,23 +453,44 @@ function formatDate(dateString: string) {
   return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 }
 
+// Group accordion functions
+function expandAllGroups() {
+  if (!parche.value) return
+  parche.value.groups.forEach(group => {
+    groupExpandedState.value[group.id] = true
+  })
+}
+
+function collapseAllGroups() {
+  if (!parche.value) return
+  parche.value.groups.forEach(group => {
+    groupExpandedState.value[group.id] = false
+  })
+}
+
 // Group functions
 function handleAddGroup() {
   if (!parche.value) return
   groupError.value = ''
-  
+
   // Validate group name
   const trimmedName = newGroupName.value.trim()
   if (!trimmedName) {
     groupError.value = 'Group name is required'
     return
   }
-  
+
+  // Get random unused color
+  const usedColors = parche.value.groups.map(g => g.color)
+  const color = newGroupColor.value || getRandomUnusedColor(usedColors)
+
   try {
-    parcheStore.addGroup(parche.value.id, trimmedName, newGroupColor.value)
+    const newGroup = parcheStore.addGroup(parche.value.id, trimmedName, color)
+    // Set new group as expanded
+    groupExpandedState.value[newGroup.id] = true
     showAddGroupModal.value = false
     newGroupName.value = ''
-    newGroupColor.value = GROUP_COLORS[0]
+    newGroupColor.value = ''
   } catch (error) {
     groupError.value = error instanceof Error ? error.message : 'Failed to add group'
   }
@@ -463,6 +503,7 @@ function openEditGroup(groupId: string) {
     selectedGroupId.value = groupId
     editGroupName.value = group.name
     editGroupColor.value = group.color
+    groupError.value = ''
     showEditGroupModal.value = true
   }
 }
@@ -470,14 +511,14 @@ function openEditGroup(groupId: string) {
 function handleEditGroup() {
   if (!parche.value || !selectedGroupId.value) return
   groupError.value = ''
-  
+
   // Validate group name
   const trimmedName = editGroupName.value.trim()
   if (!trimmedName) {
     groupError.value = 'Group name is required'
     return
   }
-  
+
   try {
     parcheStore.updateGroup(parche.value.id, selectedGroupId.value, {
       name: trimmedName,
@@ -503,6 +544,8 @@ function handleDeleteGroup() {
 // Person functions
 function openAddPerson(groupId: string) {
   selectedGroupId.value = groupId
+  newPersonName.value = ''
+  personError.value = ''
   showAddPersonModal.value = true
 }
 
