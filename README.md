@@ -1,27 +1,17 @@
-# split-bill
+# Split Bill 💰
 
-This template should help get you started developing with Vue 3 in Vite.
+A mobile-first progressive web application for splitting bills among friends in social gatherings. Built with Vue 3, TypeScript, and UnoCSS.
 
-## Recommended IDE Setup
+## ✨ Features
 
-[VS Code](https://code.visualstudio.com/) + [Vue (Official)](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Recommended Browser Setup
-
-- Chromium-based browsers (Chrome, Edge, Brave, etc.):
-  - [Vue.js devtools](https://chromewebstore.google.com/detail/vuejs-devtools/nhdogjmejiglipccpnnnanhbledajbpd) 
-  - [Turn on Custom Object Formatter in Chrome DevTools](http://bit.ly/object-formatters)
-- Firefox:
-  - [Vue.js devtools](https://addons.mozilla.org/en-US/firefox/addon/vue-js-devtools/)
-  - [Turn on Custom Object Formatter in Firefox DevTools](https://fxdx.dev/firefox-devtools-custom-object-formatters/)
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
+- **Parche Management**: Create and manage groups of friends for different social contexts
+- **Bill Splitting**: Equal split or distributed (itemized) modes
+- **Real-time Calculations**: Automatic calculation of who owes what
+- **Dark/Light Mode**: Automatic theme detection with manual toggle
+- **Offline-First**: Works completely offline using localStorage
+- **Import/Export**: Backup and restore data via JSON files
+- **Mobile-First**: Optimized for mobile with responsive desktop support
+- **No Backend**: Everything runs locally in the browser
 
 ## Project Setup
 
