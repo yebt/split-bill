@@ -6,6 +6,7 @@
     </label>
     <div class="relative">
       <input
+        ref="inputRef"
         :id="id"
         :type="type"
         :value="modelValue"
@@ -31,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref, onMounted } from 'vue'
 
 interface Props {
   modelValue: string | number
@@ -47,18 +48,22 @@ interface Props {
   min?: number
   max?: number
   step?: number | string
+  autofocus?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   required: false,
   disabled: false,
+  autofocus: false,
 })
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | number]
   blur: []
 }>()
+
+const inputRef = ref<HTMLInputElement | null>(null)
 
 const inputClasses = computed(() => {
   const base = 'w-full rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed'
@@ -76,4 +81,17 @@ function handleInput(event: Event) {
   const value = props.type === 'number' ? Number(target.value) : target.value
   emit('update:modelValue', value)
 }
+
+onMounted(() => {
+  if (props.autofocus && inputRef.value) {
+    // Use nextTick to ensure DOM is ready
+    setTimeout(() => {
+      inputRef.value?.focus()
+    }, 100)
+  }
+})
+
+defineExpose({
+  focus: () => inputRef.value?.focus(),
+})
 </script>

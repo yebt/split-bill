@@ -199,6 +199,7 @@
             label="Product Name"
             placeholder="e.g., Pizza, Beer"
             required
+            autofocus
           />
           <BaseInput
             v-model="productForm.quantity"

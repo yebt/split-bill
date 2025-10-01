@@ -246,6 +246,7 @@
             label="Group Name"
             placeholder="e.g., Friends, Family"
             required
+            autofocus
             :error="groupError"
           />
           <ColorPicker v-model="newGroupColor" label="Group Color" />
@@ -267,6 +268,7 @@
             v-model="editGroupName"
             label="Group Name"
             required
+            autofocus
             :error="groupError"
           />
           <ColorPicker v-model="editGroupColor" label="Group Color" />
@@ -288,6 +290,7 @@
           label="Person Name"
           placeholder="Enter name"
           required
+          autofocus
           :error="personError"
         />
       </form>
@@ -306,6 +309,7 @@
           v-model="editPersonName"
           label="Person Name"
           required
+          autofocus
           :error="personError"
         />
       </form>
@@ -434,8 +438,16 @@ function formatDate(dateString: string) {
 function handleAddGroup() {
   if (!parche.value) return
   groupError.value = ''
+  
+  // Validate group name
+  const trimmedName = newGroupName.value.trim()
+  if (!trimmedName) {
+    groupError.value = 'Group name is required'
+    return
+  }
+  
   try {
-    parcheStore.addGroup(parche.value.id, newGroupName.value, newGroupColor.value)
+    parcheStore.addGroup(parche.value.id, trimmedName, newGroupColor.value)
     showAddGroupModal.value = false
     newGroupName.value = ''
     newGroupColor.value = GROUP_COLORS[0]
@@ -458,9 +470,17 @@ function openEditGroup(groupId: string) {
 function handleEditGroup() {
   if (!parche.value || !selectedGroupId.value) return
   groupError.value = ''
+  
+  // Validate group name
+  const trimmedName = editGroupName.value.trim()
+  if (!trimmedName) {
+    groupError.value = 'Group name is required'
+    return
+  }
+  
   try {
     parcheStore.updateGroup(parche.value.id, selectedGroupId.value, {
-      name: editGroupName.value,
+      name: trimmedName,
       color: editGroupColor.value,
     })
     showEditGroupModal.value = false

@@ -3,7 +3,7 @@
     <Transition name="modal">
       <div
         v-if="modelValue"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
         @click.self="handleBackdropClick"
       >
         <div
@@ -42,6 +42,8 @@
 </template>
 
 <script setup lang="ts">
+import { onMounted, onUnmounted, watch } from 'vue'
+
 interface Props {
   modelValue: boolean
   title: string
@@ -67,6 +69,29 @@ function handleBackdropClick() {
     close()
   }
 }
+
+function handleEscapeKey(event: KeyboardEvent) {
+  if (event.key === 'Escape' && props.modelValue) {
+    close()
+  }
+}
+
+onMounted(() => {
+  document.addEventListener('keydown', handleEscapeKey)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleEscapeKey)
+})
+
+// Also handle escape key when modal opens/closes
+watch(() => props.modelValue, (isOpen) => {
+  if (isOpen) {
+    document.addEventListener('keydown', handleEscapeKey)
+  } else {
+    document.removeEventListener('keydown', handleEscapeKey)
+  }
+})
 </script>
 
 <style scoped>

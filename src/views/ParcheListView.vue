@@ -88,6 +88,7 @@
           label="Parche Name"
           placeholder="e.g., Weekend Trip, Dinner Party"
           required
+          autofocus
           :error="createError"
         />
       </form>
@@ -121,6 +122,7 @@
           label="New Parche Name"
           placeholder="Enter name for duplicated parche"
           required
+          autofocus
           :error="duplicateError"
         />
       </form>
@@ -198,8 +200,16 @@ function goToParche(id: string) {
 
 function handleCreate() {
   createError.value = ''
+  
+  // Validate parche name
+  const trimmedName = newParcheName.value.trim()
+  if (!trimmedName) {
+    createError.value = 'Parche name is required'
+    return
+  }
+  
   try {
-    parcheStore.createParche(newParcheName.value)
+    parcheStore.createParche(trimmedName)
     showCreateModal.value = false
     newParcheName.value = ''
   } catch (error) {
@@ -224,8 +234,16 @@ function handleDuplicate() {
 function handleDuplicateSubmit() {
   if (!selectedParcheId.value) return
   duplicateError.value = ''
+  
+  // Validate parche name
+  const trimmedName = duplicateName.value.trim()
+  if (!trimmedName) {
+    duplicateError.value = 'Parche name is required'
+    return
+  }
+  
   try {
-    parcheStore.duplicateParche(selectedParcheId.value, duplicateName.value)
+    parcheStore.duplicateParche(selectedParcheId.value, trimmedName)
     showDuplicateModal.value = false
     duplicateName.value = ''
   } catch (error) {
