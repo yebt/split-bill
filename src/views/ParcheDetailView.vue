@@ -74,7 +74,7 @@
       </div>
 
       <!-- People & Groups Tab -->
-      <div v-if="activeTab === 'people'" class="space-y-6">
+      <div v-if="activeTab === 'people'" class="space-y-6 flex flex-col gap-4">
         <div class="flex justify-end">
           <BaseButton @click="showAddGroupModal = true">
             <div class="i-lucide-plus text-lg" />
@@ -402,7 +402,7 @@ const parche = computed(() => parcheStore.currentParche)
 
 const sortedBills = computed(() => {
   if (!parche.value) return []
-  return [...parche.value.bills].sort((a, b) => 
+  return [...parche.value.bills].sort((a, b) =>
     new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
   )
 })
@@ -546,16 +546,16 @@ function handleDeletePerson() {
 
 function shareAsText() {
   if (!parche.value) return
-  
+
   let text = `💰 ${parche.value.name} - Expense Summary\n\n`
-  
+
   parcheStore.currentParcheAllPeople.forEach((person) => {
     const amount = parcheTotals.value.get(person.id) || 0
     text += `${person.name}: $${amount.toFixed(2)}\n`
   })
-  
+
   text += `\n📊 Total: $${totalAmount.value.toFixed(2)}`
-  
+
   if (navigator.share) {
     navigator.share({ text })
   } else {
