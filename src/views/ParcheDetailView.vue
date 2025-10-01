@@ -1,18 +1,23 @@
 <template>
   <div v-if="parche" class="min-h-screen">
     <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-      <div class="max-w-7xl mx-auto px-4 py-4">
-        <div class="flex items-center gap-3 mb-3">
+    <header
+      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+    >
+      <div class="mx-auto max-w-7xl px-4 py-4">
+        <div class="mb-3 flex items-center gap-3">
           <button
-            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+            class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
             @click="router.push('/')"
           >
             <div class="i-lucide-arrow-left text-2xl" />
           </button>
-          <h1 class="text-2xl font-bold flex-1">{{ parche.name }}</h1>
+          <h1 class="flex-1 text-2xl font-bold">{{ parche.name }}</h1>
           <BaseButton variant="ghost" size="sm" @click="themeStore.toggleTheme()">
-            <div :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'" class="text-lg" />
+            <div
+              :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
+              class="text-lg"
+            />
           </BaseButton>
         </div>
 
@@ -35,15 +40,15 @@
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
+    <main class="mx-auto max-w-7xl px-4 py-6">
       <!-- Tabs -->
-      <div class="flex gap-2 mb-6 border-b border-gray-200 dark:border-gray-700">
+      <div class="mb-6 flex gap-2 border-b border-gray-200 dark:border-gray-700">
         <button
           :class="[
-            'px-4 py-2 font-medium transition-colors border-b-2',
+            'border-b-2 px-4 py-2 font-medium transition-colors',
             activeTab === 'people'
               ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
           ]"
           @click="activeTab = 'people'"
         >
@@ -51,10 +56,10 @@
         </button>
         <button
           :class="[
-            'px-4 py-2 font-medium transition-colors border-b-2',
+            'border-b-2 px-4 py-2 font-medium transition-colors',
             activeTab === 'bills'
               ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
           ]"
           @click="activeTab = 'bills'"
         >
@@ -62,10 +67,10 @@
         </button>
         <button
           :class="[
-            'px-4 py-2 font-medium transition-colors border-b-2',
+            'border-b-2 px-4 py-2 font-medium transition-colors',
             activeTab === 'summary'
               ? 'border-blue-600 text-blue-600 dark:border-blue-400 dark:text-blue-400'
-              : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100',
+              : 'border-transparent text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100',
           ]"
           @click="activeTab = 'summary'"
         >
@@ -75,7 +80,7 @@
 
       <!-- People & Groups Tab -->
       <div v-if="activeTab === 'people'" class="space-y-4">
-        <div class="flex justify-between items-center">
+        <div class="flex items-center justify-between">
           <div class="flex gap-2">
             <BaseButton variant="ghost" size="sm" @click="expandAllGroups">
               <div class="i-lucide-chevrons-down text-lg" />
@@ -118,21 +123,23 @@
               <div
                 v-for="person in group.people"
                 :key="person.id"
-                class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700"
+                class="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
               >
                 <div class="flex items-center gap-3">
                   <button
                     :class="[
-                      'w-6 h-6 rounded-full border-2 flex items-center justify-center transition-colors',
+                      'flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors',
                       person.active
-                        ? 'bg-green-500 border-green-500'
-                        : 'bg-gray-300 dark:bg-gray-600 border-gray-300 dark:border-gray-600',
+                        ? 'border-green-500 bg-green-500'
+                        : 'border-gray-300 bg-gray-300 dark:border-gray-600 dark:bg-gray-600',
                     ]"
                     @click="parcheStore.togglePersonActive(parche.id, person.id)"
                   >
-                    <div v-if="person.active" class="i-lucide-check text-white text-sm" />
+                    <div v-if="person.active" class="i-lucide-check text-sm text-white" />
                   </button>
-                  <span :class="person.active ? '' : 'text-gray-500 dark:text-gray-400 line-through'">
+                  <span
+                    :class="person.active ? '' : 'text-gray-500 line-through dark:text-gray-400'"
+                  >
                     {{ person.name }}
                   </span>
                 </div>
@@ -140,7 +147,11 @@
                   <BaseButton variant="ghost" size="sm" @click="openEditPerson(person.id)">
                     <div class="i-lucide-edit text-base" />
                   </BaseButton>
-                  <BaseButton variant="ghost" size="sm" @click="openMovePerson(person.id, group.id)">
+                  <BaseButton
+                    variant="ghost"
+                    size="sm"
+                    @click="openMovePerson(person.id, group.id)"
+                  >
                     <div class="i-lucide-move text-base" />
                   </BaseButton>
                   <BaseButton variant="ghost" size="sm" @click="confirmDeletePerson(person.id)">
@@ -167,8 +178,8 @@
           </BaseButton>
         </div>
 
-        <div v-if="parche.bills.length === 0" class="text-center py-12">
-          <div class="i-lucide-receipt text-5xl text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+        <div v-if="parche.bills.length === 0" class="py-12 text-center">
+          <div class="i-lucide-receipt mx-auto mb-3 text-5xl text-gray-300 dark:text-gray-600" />
           <p class="text-gray-500 dark:text-gray-400">No bills yet</p>
         </div>
 
@@ -176,14 +187,16 @@
           v-for="bill in sortedBills"
           :key="bill.id"
           clickable
-          @click="router.push({ name: 'bill-detail', params: { parcheId: parche.id, billId: bill.id } })"
+          @click="
+            router.push({ name: 'bill-detail', params: { parcheId: parche.id, billId: bill.id } })
+          "
         >
           <div class="flex items-start justify-between">
             <div class="flex-1">
-              <div class="flex items-center gap-2 mb-2">
+              <div class="mb-2 flex items-center gap-2">
                 <span
                   :class="[
-                    'px-2 py-1 text-xs font-medium rounded',
+                    'rounded px-2 py-1 text-xs font-medium',
                     bill.type === 'equal'
                       ? 'bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-300'
                       : 'bg-purple-100 text-purple-700 dark:bg-purple-900 dark:text-purple-300',
@@ -211,15 +224,18 @@
       <!-- Summary Tab -->
       <div v-else-if="activeTab === 'summary'">
         <BaseCard>
-          <h3 class="text-lg font-semibold mb-4">Total Expenses</h3>
-          <div v-if="parcheStore.currentParcheAllPeople.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
+          <h3 class="mb-4 text-lg font-semibold">Total Expenses</h3>
+          <div
+            v-if="parcheStore.currentParcheAllPeople.length === 0"
+            class="py-8 text-center text-gray-500 dark:text-gray-400"
+          >
             No people in this parche
           </div>
           <div v-else class="space-y-3">
             <div
               v-for="person in parcheStore.currentParcheAllPeople"
               :key="person.id"
-              class="flex items-center justify-between p-3 rounded-lg bg-gray-50 dark:bg-gray-700"
+              class="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
             >
               <span class="font-medium">{{ person.name }}</span>
               <span class="text-lg font-bold text-blue-600 dark:text-blue-400">
@@ -228,7 +244,7 @@
             </div>
           </div>
 
-          <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div class="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
             <div class="flex items-center justify-between text-xl font-bold">
               <span>Total</span>
               <span class="text-blue-600 dark:text-blue-400">${totalAmount.toFixed(2)}</span>
@@ -261,7 +277,7 @@
         </div>
       </form>
       <template #footer>
-        <div class="flex gap-2 justify-end">
+        <div class="flex justify-end gap-2">
           <BaseButton variant="ghost" @click="showAddGroupModal = false">Cancel</BaseButton>
           <BaseButton @click="handleAddGroup">Add</BaseButton>
         </div>
@@ -283,7 +299,7 @@
         </div>
       </form>
       <template #footer>
-        <div class="flex gap-2 justify-end">
+        <div class="flex justify-end gap-2">
           <BaseButton variant="ghost" @click="showEditGroupModal = false">Cancel</BaseButton>
           <BaseButton @click="handleEditGroup">Save</BaseButton>
         </div>
@@ -303,7 +319,7 @@
         />
       </form>
       <template #footer>
-        <div class="flex gap-2 justify-end">
+        <div class="flex justify-end gap-2">
           <BaseButton variant="ghost" @click="showAddPersonModal = false">Cancel</BaseButton>
           <BaseButton @click="handleAddPerson">Add</BaseButton>
         </div>
@@ -322,7 +338,7 @@
         />
       </form>
       <template #footer>
-        <div class="flex gap-2 justify-end">
+        <div class="flex justify-end gap-2">
           <BaseButton variant="ghost" @click="showEditPersonModal = false">Cancel</BaseButton>
           <BaseButton @click="handleEditPerson">Save</BaseButton>
         </div>
@@ -332,7 +348,7 @@
     <!-- Move Person Modal -->
     <BaseModal v-model="showMovePersonModal" title="Move Person">
       <div class="space-y-2">
-        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Select target group:</p>
+        <p class="mb-4 text-sm text-gray-600 dark:text-gray-400">Select target group:</p>
         <BaseButton
           v-for="group in parche.groups.filter((g) => g.id !== selectedGroupId)"
           :key="group.id"
@@ -340,7 +356,7 @@
           full-width
           @click="handleMovePerson(group.id)"
         >
-          <div class="w-3 h-3 rounded-full" :style="{ backgroundColor: group.color }" />
+          <div class="h-3 w-3 rounded-full" :style="{ backgroundColor: group.color }" />
           {{ group.name }}
         </BaseButton>
       </div>
@@ -418,8 +434,8 @@ const parche = computed(() => parcheStore.currentParche)
 
 const sortedBills = computed(() => {
   if (!parche.value) return []
-  return [...parche.value.bills].sort((a, b) =>
-    new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  return [...parche.value.bills].sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   )
 })
 
@@ -442,7 +458,7 @@ onMounted(() => {
 
   // Initialize all groups as expanded
   if (parche.value) {
-    parche.value.groups.forEach(group => {
+    parche.value.groups.forEach((group) => {
       groupExpandedState.value[group.id] = true
     })
   }
@@ -456,14 +472,14 @@ function formatDate(dateString: string) {
 // Group accordion functions
 function expandAllGroups() {
   if (!parche.value) return
-  parche.value.groups.forEach(group => {
+  parche.value.groups.forEach((group) => {
     groupExpandedState.value[group.id] = true
   })
 }
 
 function collapseAllGroups() {
   if (!parche.value) return
-  parche.value.groups.forEach(group => {
+  parche.value.groups.forEach((group) => {
     groupExpandedState.value[group.id] = false
   })
 }
@@ -481,7 +497,7 @@ function handleAddGroup() {
   }
 
   // Get random unused color
-  const usedColors = parche.value.groups.map(g => g.color)
+  const usedColors = parche.value.groups.map((g) => g.color)
   const color = newGroupColor.value || getRandomUnusedColor(usedColors)
 
   try {

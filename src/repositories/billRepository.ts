@@ -41,7 +41,7 @@ export class BillRepository {
 
   updateBill(billId: string, updates: Partial<Omit<Bill, 'id' | 'parcheId' | 'createdAt'>>): Bill {
     const parches = parcheRepository.findAll()
-    
+
     for (const parche of parches) {
       const billIndex = parche.bills.findIndex((b) => b.id === billId)
       if (billIndex !== -1) {
@@ -58,7 +58,7 @@ export class BillRepository {
 
   deleteBill(billId: string): void {
     const parches = parcheRepository.findAll()
-    
+
     for (const parche of parches) {
       const filtered = parche.bills.filter((b) => b.id !== billId)
       if (filtered.length !== parche.bills.length) {
@@ -201,9 +201,7 @@ export class BillRepository {
     }
 
     const activePeople = parcheRepository.getActivePeople(bill.parcheId)
-    const participatingPeople = activePeople.filter(
-      (p) => !bill.exoneratedPeople.includes(p.id)
-    )
+    const participatingPeople = activePeople.filter((p) => !bill.exoneratedPeople.includes(p.id))
 
     const debts = new Map<string, number>()
     participatingPeople.forEach((p) => debts.set(p.id, 0))

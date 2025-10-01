@@ -1,8 +1,10 @@
 <template>
   <div class="min-h-screen">
     <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-      <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <header
+      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+    >
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <div class="flex items-center gap-3">
           <div class="i-lucide-receipt text-3xl text-blue-600 dark:text-blue-400" />
           <h1 class="text-2xl font-bold">Split Bill</h1>
@@ -15,19 +17,24 @@
             <div class="i-lucide-download text-lg" />
           </BaseButton>
           <BaseButton variant="ghost" size="sm" @click="themeStore.toggleTheme()">
-            <div :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'" class="text-lg" />
+            <div
+              :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
+              class="text-lg"
+            />
           </BaseButton>
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 py-6">
+    <main class="mx-auto max-w-7xl px-4 py-6">
       <!-- Empty State -->
-      <div v-if="parcheStore.parches.length === 0" class="text-center py-16">
-        <div class="i-lucide-users text-6xl text-gray-300 dark:text-gray-600 mx-auto mb-4" />
-        <h2 class="text-2xl font-semibold text-gray-700 dark:text-gray-300 mb-2">No parches yet</h2>
-        <p class="text-gray-500 dark:text-gray-400 mb-6">Create your first parche to start splitting bills</p>
+      <div v-if="parcheStore.parches.length === 0" class="py-16 text-center">
+        <div class="i-lucide-users mx-auto mb-4 text-6xl text-gray-300 dark:text-gray-600" />
+        <h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-300">No parches yet</h2>
+        <p class="mb-6 text-gray-500 dark:text-gray-400">
+          Create your first parche to start splitting bills
+        </p>
         <BaseButton @click="showCreateModal = true">
           <div class="i-lucide-plus text-lg" />
           Create Parche
@@ -36,7 +43,7 @@
 
       <!-- Parche List -->
       <div v-else>
-        <div class="flex items-center justify-between mb-6">
+        <div class="mb-6 flex items-center justify-between">
           <h2 class="text-xl font-semibold">Your Parches</h2>
           <BaseButton @click="showCreateModal = true">
             <div class="i-lucide-plus text-lg" />
@@ -44,17 +51,19 @@
           </BaseButton>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           <BaseCard
             v-for="parche in parcheStore.parches"
             :key="parche.id"
             clickable
             @click="goToParche(parche.id)"
           >
-            <div class="flex items-start justify-between mb-3">
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">{{ parche.name }}</h3>
+            <div class="mb-3 flex items-start justify-between">
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                {{ parche.name }}
+              </h3>
               <button
-                class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+                class="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
                 @click.stop="openOptionsMenu(parche.id)"
               >
                 <div class="i-lucide-more-vertical text-xl" />
@@ -64,7 +73,12 @@
             <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
               <div class="flex items-center gap-2">
                 <div class="i-lucide-users text-base" />
-                <span>{{ getParcheStats(parche).totalPeople }} people ({{ getParcheStats(parche).activePeople }} active)</span>
+                <span
+                  >{{ getParcheStats(parche).totalPeople }} people ({{
+                    getParcheStats(parche).activePeople
+                  }}
+                  active)</span
+                >
               </div>
               <div class="flex items-center gap-2">
                 <div class="i-lucide-layers text-base" />
@@ -93,7 +107,7 @@
         />
       </form>
       <template #footer>
-        <div class="flex gap-2 justify-end">
+        <div class="flex justify-end gap-2">
           <BaseButton variant="ghost" @click="showCreateModal = false">Cancel</BaseButton>
           <BaseButton @click="handleCreate">Create</BaseButton>
         </div>
@@ -127,7 +141,7 @@
         />
       </form>
       <template #footer>
-        <div class="flex gap-2 justify-end">
+        <div class="flex justify-end gap-2">
           <BaseButton variant="ghost" @click="showDuplicateModal = false">Cancel</BaseButton>
           <BaseButton @click="handleDuplicateSubmit">Duplicate</BaseButton>
         </div>
@@ -200,14 +214,14 @@ function goToParche(id: string) {
 
 function handleCreate() {
   createError.value = ''
-  
+
   // Validate parche name
   const trimmedName = newParcheName.value.trim()
   if (!trimmedName) {
     createError.value = 'Parche name is required'
     return
   }
-  
+
   try {
     parcheStore.createParche(trimmedName)
     showCreateModal.value = false
@@ -234,14 +248,14 @@ function handleDuplicate() {
 function handleDuplicateSubmit() {
   if (!selectedParcheId.value) return
   duplicateError.value = ''
-  
+
   // Validate parche name
   const trimmedName = duplicateName.value.trim()
   if (!trimmedName) {
     duplicateError.value = 'Parche name is required'
     return
   }
-  
+
   try {
     parcheStore.duplicateParche(selectedParcheId.value, trimmedName)
     showDuplicateModal.value = false
@@ -294,7 +308,7 @@ function handleImportFile(event: Event) {
     }
   }
   reader.readAsText(file)
-  
+
   // Reset input
   target.value = ''
 }

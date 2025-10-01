@@ -3,23 +3,25 @@
     <Transition name="modal">
       <div
         v-if="modelValue"
-        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50 backdrop-blur-sm"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4 backdrop-blur-sm"
         @click.self="handleBackdropClick"
       >
         <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-lg w-full max-h-[90vh] overflow-hidden flex flex-col"
+          class="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-gray-800"
           role="dialog"
           aria-modal="true"
         >
           <!-- Header -->
-          <div class="flex items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700">
+          <div
+            class="flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700"
+          >
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
               {{ title }}
             </h2>
             <button
               v-if="showClose"
               type="button"
-              class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
+              class="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
               @click="close"
             >
               <div class="i-lucide-x text-2xl" />
@@ -32,7 +34,7 @@
           </div>
 
           <!-- Footer -->
-          <div v-if="$slots.footer" class="p-4 border-t border-gray-200 dark:border-gray-700">
+          <div v-if="$slots.footer" class="border-t border-gray-200 p-4 dark:border-gray-700">
             <slot name="footer" />
           </div>
         </div>
@@ -85,13 +87,16 @@ onUnmounted(() => {
 })
 
 // Also handle escape key when modal opens/closes
-watch(() => props.modelValue, (isOpen) => {
-  if (isOpen) {
-    document.addEventListener('keydown', handleEscapeKey)
-  } else {
-    document.removeEventListener('keydown', handleEscapeKey)
-  }
-})
+watch(
+  () => props.modelValue,
+  (isOpen) => {
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscapeKey)
+    } else {
+      document.removeEventListener('keydown', handleEscapeKey)
+    }
+  },
+)
 </script>
 
 <style scoped>

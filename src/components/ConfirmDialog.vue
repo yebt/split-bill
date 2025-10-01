@@ -10,7 +10,7 @@
     </p>
 
     <template #footer>
-      <div class="flex gap-2 justify-end">
+      <div class="flex justify-end gap-2">
         <BaseButton variant="ghost" @click="cancel">
           {{ cancelText }}
         </BaseButton>

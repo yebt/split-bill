@@ -77,7 +77,11 @@ export const useParcheStore = defineStore('parche', () => {
     return group
   }
 
-  function updateGroup(parcheId: string, groupId: string, updates: Partial<Omit<Group, 'id' | 'people'>>) {
+  function updateGroup(
+    parcheId: string,
+    groupId: string,
+    updates: Partial<Omit<Group, 'id' | 'people'>>,
+  ) {
     parcheRepository.updateGroup(parcheId, groupId, updates)
     loadParches()
   }

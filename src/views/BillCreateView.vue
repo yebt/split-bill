@@ -1,37 +1,39 @@
 <template>
   <div v-if="parche" class="min-h-screen">
     <!-- Header -->
-    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 sticky top-0 z-10">
-      <div class="max-w-7xl mx-auto px-4 py-4">
+    <header
+      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+    >
+      <div class="mx-auto max-w-7xl px-4 py-4">
         <div class="flex items-center gap-3">
           <button
-            class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-100"
+            class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
             @click="router.back()"
           >
             <div class="i-lucide-arrow-left text-2xl" />
           </button>
-          <h1 class="text-2xl font-bold flex-1">New Bill</h1>
+          <h1 class="flex-1 text-2xl font-bold">New Bill</h1>
         </div>
       </div>
     </header>
 
     <!-- Main Content -->
-    <main class="max-w-3xl mx-auto px-4 py-6">
+    <main class="mx-auto max-w-3xl px-4 py-6">
       <div class="space-y-6">
         <!-- Bill Type Selection -->
         <BaseCard>
-          <h3 class="text-lg font-semibold mb-4">Bill Type</h3>
+          <h3 class="mb-4 text-lg font-semibold">Bill Type</h3>
           <div class="grid grid-cols-2 gap-3">
             <button
               :class="[
-                'p-4 rounded-lg border-2 transition-all text-left',
+                'rounded-lg border-2 p-4 text-left transition-all',
                 billType === 'equal'
                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-gray-400',
+                  : 'border-gray-300 hover:border-gray-400 dark:border-gray-600',
               ]"
               @click="billType = 'equal'"
             >
-              <div class="flex items-center gap-2 mb-2">
+              <div class="mb-2 flex items-center gap-2">
                 <div class="i-lucide-equal text-xl" />
                 <span class="font-semibold">Equal Split</span>
               </div>
@@ -42,14 +44,14 @@
 
             <button
               :class="[
-                'p-4 rounded-lg border-2 transition-all text-left',
+                'rounded-lg border-2 p-4 text-left transition-all',
                 billType === 'distributed'
                   ? 'border-blue-600 bg-blue-50 dark:bg-blue-900/20'
-                  : 'border-gray-300 dark:border-gray-600 hover:border-gray-400',
+                  : 'border-gray-300 hover:border-gray-400 dark:border-gray-600',
               ]"
               @click="billType = 'distributed'"
             >
-              <div class="flex items-center gap-2 mb-2">
+              <div class="mb-2 flex items-center gap-2">
                 <div class="i-lucide-split text-xl" />
                 <span class="font-semibold">Distributed</span>
               </div>
@@ -62,7 +64,7 @@
 
         <!-- Products -->
         <BaseCard>
-          <div class="flex items-center justify-between mb-4">
+          <div class="mb-4 flex items-center justify-between">
             <h3 class="text-lg font-semibold">Products</h3>
             <BaseButton size="sm" @click="showAddProductModal = true">
               <div class="i-lucide-plus text-lg" />
@@ -70,7 +72,10 @@
             </BaseButton>
           </div>
 
-          <div v-if="products.length === 0" class="text-center py-8 text-gray-500 dark:text-gray-400">
+          <div
+            v-if="products.length === 0"
+            class="py-8 text-center text-gray-500 dark:text-gray-400"
+          >
             No products added yet
           </div>
 
@@ -78,13 +83,15 @@
             <div
               v-for="(product, index) in products"
               :key="index"
-              class="p-3 rounded-lg bg-gray-50 dark:bg-gray-700"
+              class="rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
             >
-              <div class="flex items-start justify-between mb-2">
+              <div class="mb-2 flex items-start justify-between">
                 <div class="flex-1">
                   <div class="font-medium">{{ product.name }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ product.quantity }} × ${{ product.price.toFixed(2) }} = ${{ (product.quantity * product.price).toFixed(2) }}
+                    {{ product.quantity }} × ${{ product.price.toFixed(2) }} = ${{
+                      (product.quantity * product.price).toFixed(2)
+                    }}
                   </div>
                 </div>
                 <div class="flex gap-2">
@@ -105,16 +112,16 @@
 
               <!-- Assigned People (for distributed) -->
               <div v-if="billType === 'distributed'" class="mt-2">
-                <div class="text-xs text-gray-500 dark:text-gray-400 mb-1">Assigned to:</div>
+                <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">Assigned to:</div>
                 <div class="flex flex-wrap gap-1">
                   <button
                     v-for="person in parcheStore.currentParcheActivePeople"
                     :key="person.id"
                     :class="[
-                      'px-2 py-1 text-xs rounded transition-colors',
+                      'rounded px-2 py-1 text-xs transition-colors',
                       product.assignedTo.includes(person.id)
                         ? 'bg-blue-600 text-white'
-                        : 'bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-300',
+                        : 'bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300',
                     ]"
                     @click="toggleAssignment(index, person.id)"
                   >
@@ -125,7 +132,7 @@
             </div>
           </div>
 
-          <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div class="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
             <div class="flex items-center justify-between text-lg font-bold">
               <span>Total</span>
               <span class="text-blue-600 dark:text-blue-400">${total.toFixed(2)}</span>
@@ -135,8 +142,8 @@
 
         <!-- Exonerated People -->
         <BaseCard>
-          <h3 class="text-lg font-semibold mb-4">Exonerated People</h3>
-          <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+          <h3 class="mb-4 text-lg font-semibold">Exonerated People</h3>
+          <p class="mb-3 text-sm text-gray-600 dark:text-gray-400">
             Select people who won't pay for this bill
           </p>
 
@@ -145,10 +152,10 @@
               v-for="person in parcheStore.currentParcheActivePeople"
               :key="person.id"
               :class="[
-                'px-3 py-2 rounded-lg transition-colors',
+                'rounded-lg px-3 py-2 transition-colors',
                 exoneratedPeople.includes(person.id)
                   ? 'bg-red-100 text-red-700 dark:bg-red-900 dark:text-red-300'
-                  : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300',
+                  : 'bg-gray-200 text-gray-700 dark:bg-gray-700 dark:text-gray-300',
               ]"
               @click="toggleExoneration(person.id)"
             >
@@ -159,12 +166,12 @@
 
         <!-- Preview -->
         <BaseCard v-if="products.length > 0">
-          <h3 class="text-lg font-semibold mb-4">Split Preview</h3>
+          <h3 class="mb-4 text-lg font-semibold">Split Preview</h3>
           <div class="space-y-2">
             <div
               v-for="person in participatingPeople"
               :key="person.id"
-              class="flex items-center justify-between p-2 rounded bg-gray-50 dark:bg-gray-700"
+              class="flex items-center justify-between rounded bg-gray-50 p-2 dark:bg-gray-700"
             >
               <span>{{ person.name }}</span>
               <span class="font-bold text-blue-600 dark:text-blue-400">
@@ -176,9 +183,7 @@
 
         <!-- Actions -->
         <div class="flex gap-3">
-          <BaseButton variant="ghost" full-width @click="router.back()">
-            Cancel
-          </BaseButton>
+          <BaseButton variant="ghost" full-width @click="router.back()"> Cancel </BaseButton>
           <BaseButton
             full-width
             :disabled="products.length === 0 || participatingPeople.length === 0"
@@ -191,7 +196,10 @@
     </main>
 
     <!-- Add/Edit Product Modal -->
-    <BaseModal v-model="showAddProductModal" :title="editingProductIndex !== null ? 'Edit Product' : 'Add Product'">
+    <BaseModal
+      v-model="showAddProductModal"
+      :title="editingProductIndex !== null ? 'Edit Product' : 'Add Product'"
+    >
       <form @submit.prevent="handleAddProduct">
         <div class="space-y-4">
           <BaseInput
@@ -220,9 +228,11 @@
         </div>
       </form>
       <template #footer>
-        <div class="flex gap-2 justify-end">
+        <div class="flex justify-end gap-2">
           <BaseButton variant="ghost" @click="closeProductModal">Cancel</BaseButton>
-          <BaseButton @click="handleAddProduct">{{ editingProductIndex !== null ? 'Save' : 'Add' }}</BaseButton>
+          <BaseButton @click="handleAddProduct">{{
+            editingProductIndex !== null ? 'Save' : 'Add'
+          }}</BaseButton>
         </div>
       </template>
     </BaseModal>
@@ -246,7 +256,9 @@ const parcheStore = useParcheStore()
 const billStore = useBillStore()
 
 const billType = ref<BillType>('equal')
-const products = ref<Array<{ name: string; quantity: number; price: number; assignedTo: string[] }>>([])
+const products = ref<
+  Array<{ name: string; quantity: number; price: number; assignedTo: string[] }>
+>([])
 const exoneratedPeople = ref<string[]>([])
 
 const showAddProductModal = ref(false)
@@ -264,9 +276,7 @@ const total = computed(() => {
 })
 
 const participatingPeople = computed(() => {
-  return parcheStore.currentParcheActivePeople.filter(
-    (p) => !exoneratedPeople.value.includes(p.id)
-  )
+  return parcheStore.currentParcheActivePeople.filter((p) => !exoneratedPeople.value.includes(p.id))
 })
 
 onMounted(() => {
@@ -376,7 +386,7 @@ function handleCreateBill() {
         bill.id,
         product.name,
         product.quantity,
-        product.price
+        product.price,
       )
 
       // Assign people for distributed bills

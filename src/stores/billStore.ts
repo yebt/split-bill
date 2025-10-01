@@ -49,7 +49,10 @@ export const useBillStore = defineStore('bill', () => {
     return bill
   }
 
-  function updateBill(billId: string, updates: Partial<Omit<Bill, 'id' | 'parcheId' | 'createdAt'>>) {
+  function updateBill(
+    billId: string,
+    updates: Partial<Omit<Bill, 'id' | 'parcheId' | 'createdAt'>>,
+  ) {
     billRepository.updateBill(billId, updates)
     const parcheStore = useParcheStore()
     parcheStore.loadParches()

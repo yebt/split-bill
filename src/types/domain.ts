@@ -101,18 +101,18 @@ export function generateRandomColor(): string {
  * Get a random unused color from the palette, or generate a new one if all are used
  */
 export function getRandomUnusedColor(usedColors: string[]): string {
-  const availableColors = GROUP_COLORS.filter(color => !usedColors.includes(color))
-  
+  const availableColors = GROUP_COLORS.filter((color) => !usedColors.includes(color))
+
   if (availableColors.length > 0) {
     const randomIndex = Math.floor(Math.random() * availableColors.length)
     return availableColors[randomIndex] as string
   }
-  
+
   // All predefined colors are used, generate a random one
   let newColor: string
   do {
     newColor = generateRandomColor()
   } while (usedColors.includes(newColor))
-  
+
   return newColor
 }

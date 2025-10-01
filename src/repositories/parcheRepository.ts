@@ -146,7 +146,11 @@ export class ParcheRepository {
     return newGroup
   }
 
-  updateGroup(parcheId: string, groupId: string, updates: Partial<Omit<Group, 'id' | 'people'>>): Group {
+  updateGroup(
+    parcheId: string,
+    groupId: string,
+    updates: Partial<Omit<Group, 'id' | 'people'>>,
+  ): Group {
     const parche = this.findById(parcheId)
     if (!parche) {
       throw new Error(`Parche with id "${parcheId}" not found`)

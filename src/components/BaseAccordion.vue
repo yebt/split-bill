@@ -1,9 +1,9 @@
 <template>
-  <div class="border rounded-lg overflow-hidden" :style="{ borderColor: color }">
+  <div class="overflow-hidden rounded-lg border" :style="{ borderColor: color }">
     <!-- Header -->
     <button
       type="button"
-      class="w-full px-4 py-3 flex items-center justify-between transition-colors hover:opacity-90"
+      class="flex w-full items-center justify-between px-4 py-3 transition-colors hover:opacity-90"
       :style="{ backgroundColor: color }"
       @click="toggle"
     >
@@ -51,9 +51,12 @@ const emit = defineEmits<{
 
 const isOpen = ref(props.modelValue)
 
-watch(() => props.modelValue, (newValue) => {
-  isOpen.value = newValue
-})
+watch(
+  () => props.modelValue,
+  (newValue) => {
+    isOpen.value = newValue
+  },
+)
 
 function toggle() {
   isOpen.value = !isOpen.value
