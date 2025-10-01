@@ -250,13 +250,13 @@
           />
           <ColorPicker v-model="newGroupColor" label="Group Color" />
         </div>
-        <template #footer>
-          <div class="flex gap-2 justify-end">
-            <BaseButton variant="ghost" @click="showAddGroupModal = false">Cancel</BaseButton>
-            <BaseButton type="submit">Add</BaseButton>
-          </div>
-        </template>
       </form>
+      <template #footer>
+        <div class="flex gap-2 justify-end">
+          <BaseButton variant="ghost" @click="showAddGroupModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleAddGroup">Add</BaseButton>
+        </div>
+      </template>
     </BaseModal>
 
     <!-- Edit Group Modal -->
@@ -271,13 +271,13 @@
           />
           <ColorPicker v-model="editGroupColor" label="Group Color" />
         </div>
-        <template #footer>
-          <div class="flex gap-2 justify-end">
-            <BaseButton variant="ghost" @click="showEditGroupModal = false">Cancel</BaseButton>
-            <BaseButton type="submit">Save</BaseButton>
-          </div>
-        </template>
       </form>
+      <template #footer>
+        <div class="flex gap-2 justify-end">
+          <BaseButton variant="ghost" @click="showEditGroupModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleEditGroup">Save</BaseButton>
+        </div>
+      </template>
     </BaseModal>
 
     <!-- Add Person Modal -->
@@ -290,13 +290,13 @@
           required
           :error="personError"
         />
-        <template #footer>
-          <div class="flex gap-2 justify-end">
-            <BaseButton variant="ghost" @click="showAddPersonModal = false">Cancel</BaseButton>
-            <BaseButton type="submit">Add</BaseButton>
-          </div>
-        </template>
       </form>
+      <template #footer>
+        <div class="flex gap-2 justify-end">
+          <BaseButton variant="ghost" @click="showAddPersonModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleAddPerson">Add</BaseButton>
+        </div>
+      </template>
     </BaseModal>
 
     <!-- Edit Person Modal -->
@@ -308,13 +308,13 @@
           required
           :error="personError"
         />
-        <template #footer>
-          <div class="flex gap-2 justify-end">
-            <BaseButton variant="ghost" @click="showEditPersonModal = false">Cancel</BaseButton>
-            <BaseButton type="submit">Save</BaseButton>
-          </div>
-        </template>
       </form>
+      <template #footer>
+        <div class="flex gap-2 justify-end">
+          <BaseButton variant="ghost" @click="showEditPersonModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleEditPerson">Save</BaseButton>
+        </div>
+      </template>
     </BaseModal>
 
     <!-- Move Person Modal -->

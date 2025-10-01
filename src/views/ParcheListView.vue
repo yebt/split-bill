@@ -90,13 +90,13 @@
           required
           :error="createError"
         />
-        <template #footer>
-          <div class="flex gap-2 justify-end">
-            <BaseButton variant="ghost" @click="showCreateModal = false">Cancel</BaseButton>
-            <BaseButton type="submit">Create</BaseButton>
-          </div>
-        </template>
       </form>
+      <template #footer>
+        <div class="flex gap-2 justify-end">
+          <BaseButton variant="ghost" @click="showCreateModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleCreate">Create</BaseButton>
+        </div>
+      </template>
     </BaseModal>
 
     <!-- Options Menu Modal -->
@@ -123,13 +123,13 @@
           required
           :error="duplicateError"
         />
-        <template #footer>
-          <div class="flex gap-2 justify-end">
-            <BaseButton variant="ghost" @click="showDuplicateModal = false">Cancel</BaseButton>
-            <BaseButton type="submit">Duplicate</BaseButton>
-          </div>
-        </template>
       </form>
+      <template #footer>
+        <div class="flex gap-2 justify-end">
+          <BaseButton variant="ghost" @click="showDuplicateModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleDuplicateSubmit">Duplicate</BaseButton>
+        </div>
+      </template>
     </BaseModal>
 
     <!-- Delete Confirmation -->
