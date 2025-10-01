@@ -217,13 +217,13 @@
             required
           />
         </div>
-        <template #footer>
-          <div class="flex gap-2 justify-end">
-            <BaseButton variant="ghost" @click="closeProductModal">Cancel</BaseButton>
-            <BaseButton type="submit">{{ editingProductIndex !== null ? 'Save' : 'Add' }}</BaseButton>
-          </div>
-        </template>
       </form>
+      <template #footer>
+        <div class="flex gap-2 justify-end">
+          <BaseButton variant="ghost" @click="closeProductModal">Cancel</BaseButton>
+          <BaseButton @click="handleAddProduct">{{ editingProductIndex !== null ? 'Save' : 'Add' }}</BaseButton>
+        </div>
+      </template>
     </BaseModal>
   </div>
 </template>
@@ -233,7 +233,7 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useParcheStore } from '@/stores/parcheStore'
 import { useBillStore } from '@/stores/billStore'
-import type { BillType, Person } from '@/types/domain'
+import type { BillType } from '@/types/domain'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
@@ -284,6 +284,7 @@ function toggleExoneration(personId: string) {
 
 function toggleAssignment(productIndex: number, personId: string) {
   const product = products.value[productIndex]
+  if (!product) return
   const index = product.assignedTo.indexOf(personId)
   if (index > -1) {
     product.assignedTo.splice(index, 1)
@@ -295,6 +296,7 @@ function toggleAssignment(productIndex: number, personId: string) {
 function editProduct(index: number) {
   editingProductIndex.value = index
   const product = products.value[index]
+  if (!product) return
   productForm.value = {
     name: product.name,
     quantity: product.quantity,
@@ -311,9 +313,11 @@ function handleAddProduct() {
   if (editingProductIndex.value !== null) {
     // Edit existing
     const product = products.value[editingProductIndex.value]
-    product.name = productForm.value.name
-    product.quantity = productForm.value.quantity
-    product.price = productForm.value.price
+    if (product) {
+      product.name = productForm.value.name
+      product.quantity = productForm.value.quantity
+      product.price = productForm.value.price
+    }
   } else {
     // Add new
     products.value.push({

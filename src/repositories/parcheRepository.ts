@@ -62,14 +62,18 @@ export class ParcheRepository {
       throw new Error(`Parche with id "${id}" not found`)
     }
 
+    const currentParche = parches[index]
+    if (!currentParche) {
+      throw new Error(`Parche with id "${id}" not found`)
+    }
     // Check for duplicate name if name is being updated
-    if (updates.name && updates.name !== parches[index].name) {
+    if (updates.name && updates.name !== currentParche.name) {
       if (parches.some((p) => p.name === updates.name)) {
         throw new Error(`Parche with name "${updates.name}" already exists`)
       }
     }
 
-    const updated: Parche = { ...parches[index], ...updates }
+    const updated = { ...currentParche, ...updates } as Parche
     parches[index] = updated
     this.saveAll(parches)
     return updated
@@ -153,14 +157,18 @@ export class ParcheRepository {
       throw new Error(`Group with id "${groupId}" not found`)
     }
 
+    const currentGroup = parche.groups[groupIndex]
+    if (!currentGroup) {
+      throw new Error(`Group with id "${groupId}" not found`)
+    }
     // Check for duplicate name if name is being updated
-    if (updates.name && updates.name !== parche.groups[groupIndex].name) {
+    if (updates.name && updates.name !== currentGroup.name) {
       if (parche.groups.some((g) => g.name === updates.name)) {
         throw new Error(`Group with name "${updates.name}" already exists in this parche`)
       }
     }
 
-    const updated: Group = { ...parche.groups[groupIndex], ...updates }
+    const updated = { ...currentGroup, ...updates } as Group
     parche.groups[groupIndex] = updated
     this.update(parcheId, { groups: parche.groups })
     return updated
@@ -223,9 +231,11 @@ export class ParcheRepository {
     let groupIndex = -1
 
     for (let i = 0; i < parche.groups.length; i++) {
-      const personIndex = parche.groups[i].people.findIndex((p) => p.id === personId)
+      const group = parche.groups[i]
+      if (!group) continue
+      const personIndex = group.people.findIndex((p) => p.id === personId)
       if (personIndex !== -1) {
-        person = parche.groups[i].people[personIndex]
+        person = group.people[personIndex]
         groupIndex = i
         break
       }
@@ -243,9 +253,13 @@ export class ParcheRepository {
       }
     }
 
-    const personIndex = parche.groups[groupIndex].people.findIndex((p) => p.id === personId)
-    const updated: Person = { ...person, ...updates }
-    parche.groups[groupIndex].people[personIndex] = updated
+    const group = parche.groups[groupIndex]
+    if (!group) {
+      throw new Error(`Group not found`)
+    }
+    const personIndex = group.people.findIndex((p) => p.id === personId)
+    const updated = { ...person, ...updates } as Person
+    group.people[personIndex] = updated
     this.update(parcheId, { groups: parche.groups })
     return updated
   }

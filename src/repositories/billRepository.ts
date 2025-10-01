@@ -45,7 +45,8 @@ export class BillRepository {
     for (const parche of parches) {
       const billIndex = parche.bills.findIndex((b) => b.id === billId)
       if (billIndex !== -1) {
-        const updated: Bill = { ...parche.bills[billIndex], ...updates }
+        const currentBill = parche.bills[billIndex]
+        const updated = { ...currentBill, ...updates } as Bill
         parche.bills[billIndex] = updated
         parcheRepository.update(parche.id, { bills: parche.bills })
         return updated
@@ -100,7 +101,8 @@ export class BillRepository {
       throw new Error(`Product with id "${productId}" not found`)
     }
 
-    const updated: Product = { ...bill.products[productIndex], ...updates }
+    const currentProduct = bill.products[productIndex]
+    const updated = { ...currentProduct, ...updates } as Product
     bill.products[productIndex] = updated
     this.updateBill(billId, { products: bill.products })
     return updated
