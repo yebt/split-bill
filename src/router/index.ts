@@ -54,4 +54,19 @@ const router = createRouter({
   ],
 })
 
+// router.beforeEach((to, from) => {
+//   if (to.name === 'not-found') {
+//     return { name: 'home' }
+//   }
+// })
+
+// router.beforeResolve((to, from, next) => {
+//   if (document.startViewTransition) {
+//     document.startViewTransition(() => next())
+//   } else {
+//     next()
+//   }
+// })
+
+
 export default router
