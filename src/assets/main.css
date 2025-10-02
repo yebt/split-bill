@@ -1,0 +1,76 @@
+/* html { overflow-y: scroll; } */
+/* :root { scrollbar-gutter: stable both-edges; } */
+
+/* View transitions for route changes */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.fade-enter-from {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.fade-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+.fade-fast-enter-active,
+.fade-fast-leave-active {
+  transition: opacity 0.125s ease, transform 0.125s ease;
+}
+
+.fade-fast-enter-from {
+  opacity: 0;
+  transform: translateX(10px);
+}
+
+.fade-fast-leave-to {
+  opacity: 0;
+  transform: translateX(-10px);
+}
+
+
+
+/* View Transitions API for modern browsers */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (view-transition-name: none) {
+    ::view-transition-old(root),
+    ::view-transition-new(root) {
+      animation-duration: 0.3s;
+      animation-timing-function: ease-in-out;
+    }
+
+    ::view-transition-old(root) {
+      animation-name: slide-out;
+    }
+
+    ::view-transition-new(root) {
+      animation-name: slide-in;
+    }
+
+    @keyframes slide-out {
+      from {
+        opacity: 1;
+        transform: translateX(0);
+      }
+      to {
+        opacity: 0;
+        transform: translateX(-20px);
+      }
+    }
+
+    @keyframes slide-in {
+      from {
+        opacity: 0;
+        transform: translateX(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+  }
+}
