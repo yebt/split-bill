@@ -17,6 +17,10 @@ useHead({
   title: siteTitle,
   // titleTemplate: (title) => (title ? `${title} | ${siteTitle}` : siteTitle),
   meta: [
+    // Favicon
+    { name: 'msapplication-TileColor', content: '#2563eb' },
+    { name: 'theme-color', content: '#2563eb' },
+
     // Basic meta tags
     { name: 'description', content: siteDescription },
     { name: 'keywords', content: 'split bill, expense tracker, bill splitting, group expenses, parche' },
@@ -46,7 +50,14 @@ useHead({
   ],
   link: [
     { rel: 'canonical', href: siteUrl },
-    { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+
+    // Favicons
+    { rel: 'icon', href: '/favicons/favicon.ico' },
+    { rel: 'icon', type: 'image/svg+xml', href: '/favicons/favicon.svg' },
+    { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicons/apple-touch-icon.png' },
+    { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicons/favicon-32x32.png' },
+    { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicons/favicon-16x16.png' },
+    { rel: 'manifest', href: '/site.webmanifest' },
   ],
 })
 </script>
