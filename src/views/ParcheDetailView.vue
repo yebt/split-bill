@@ -84,16 +84,16 @@
           <div class="flex gap-2">
             <BaseButton variant="ghost" size="sm" @click="expandAllGroups">
               <div class="i-lucide-chevrons-down text-lg" />
-              Expand All
+              <span class="hidden sm:inline">Expand All</span>
             </BaseButton>
             <BaseButton variant="ghost" size="sm" @click="collapseAllGroups">
               <div class="i-lucide-chevrons-up text-lg" />
-              Collapse All
+              <span class="hidden sm:inline">Collapse All</span>
             </BaseButton>
           </div>
           <BaseButton @click="showAddGroupModal = true">
             <div class="i-lucide-plus text-lg" />
-            Add Group
+            <span class="hidden sm:inline">Add Group</span>
           </BaseButton>
         </div>
 
@@ -162,7 +162,7 @@
 
               <BaseButton variant="ghost" full-width @click="openAddPerson(group.id)">
                 <div class="i-lucide-plus text-lg" />
-                Add Person
+                <span class="hidden sm:inline">Add Person</span>
               </BaseButton>
             </div>
           </BaseAccordion>
@@ -174,7 +174,7 @@
         <div class="flex justify-end">
           <BaseButton @click="router.push({ name: 'bill-create', params: { id: parche.id } })">
             <div class="i-lucide-plus text-lg" />
-            New Bill
+            <span class="hidden sm:inline">New Bill</span>
           </BaseButton>
         </div>
 
