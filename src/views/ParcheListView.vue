@@ -6,7 +6,10 @@
     >
       <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
         <div class="flex items-center gap-3">
-          <div class="i-lucide-receipt text-3xl text-blue-600 dark:text-blue-400" />
+          <!-- <div class="i-lucide-receipt text-3xl text-blue-600 dark:text-blue-400" /> -->
+          <div>
+            <img src="@/assets/logo.svg" alt="Logo" class="h-10 w-10" />
+          </div>
           <h1 class="text-2xl font-bold">Split Bill</h1>
         </div>
         <div class="flex items-center gap-2">

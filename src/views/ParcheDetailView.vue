@@ -247,7 +247,7 @@
           <div class="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
             <div class="flex items-center justify-between text-xl font-bold">
               <span>Total</span>
-              <span class="text-blue-600 dark:text-blue-400">${totalAmount.toFixed(2)}</span>
+              <span class="text-blue-600 dark:text-blue-400">${{ totalAmount.toFixed(2) }}</span>
             </div>
           </div>
 
