@@ -4,3 +4,6 @@
 - ~~add some view transitions.~~
 - ~~the binding in bills is interpolated~~
 - ~~responsive buttons in parche~~
+- Put icons in the modal of creation to fastly understand what i edit or create
+- Decrease the view transition time
+- Add group transitions when add and remove elements (resalt briefly the new entity)
