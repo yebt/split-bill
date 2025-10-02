@@ -1,6 +1,6 @@
 - ~~manage 404~~ 
-- auto capitalize names of persons
-- auto capitalize names of groups
-- add some view transitions.
+- ~~auto capitalize names of persons~~
+- ~~auto capitalize names of groups~~
+- ~~add some view transitions.~~
 - ~~the binding in bills is interpolated~~
 - responsive buttons in parche

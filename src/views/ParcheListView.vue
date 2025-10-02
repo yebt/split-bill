@@ -178,6 +178,7 @@ import { useRouter } from 'vue-router'
 import { useParcheStore } from '@/stores/parcheStore'
 import { useThemeStore } from '@/stores/themeStore'
 import type { Parche } from '@/types/domain'
+import { capitalizeWords } from '@/utils/text'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
@@ -225,8 +226,11 @@ function handleCreate() {
     return
   }
 
+  // Capitalize parche name
+  const capitalizedName = capitalizeWords(trimmedName)
+
   try {
-    parcheStore.createParche(trimmedName)
+    parcheStore.createParche(capitalizedName)
     showCreateModal.value = false
     newParcheName.value = ''
   } catch (error) {
@@ -259,8 +263,11 @@ function handleDuplicateSubmit() {
     return
   }
 
+  // Capitalize parche name
+  const capitalizedName = capitalizeWords(trimmedName)
+
   try {
-    parcheStore.duplicateParche(selectedParcheId.value, trimmedName)
+    parcheStore.duplicateParche(selectedParcheId.value, capitalizedName)
     showDuplicateModal.value = false
     duplicateName.value = ''
   } catch (error) {

@@ -390,6 +390,7 @@ import { useParcheStore } from '@/stores/parcheStore'
 import { useBillStore } from '@/stores/billStore'
 import { useThemeStore } from '@/stores/themeStore'
 import { getRandomUnusedColor } from '@/types/domain'
+import { capitalizeWords } from '@/utils/text'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import BaseAccordion from '@/components/BaseAccordion.vue'
@@ -496,12 +497,15 @@ function handleAddGroup() {
     return
   }
 
+  // Capitalize group name
+  const capitalizedName = capitalizeWords(trimmedName)
+
   // Get random unused color
   const usedColors = parche.value.groups.map((g) => g.color)
   const color = newGroupColor.value || getRandomUnusedColor(usedColors)
 
   try {
-    const newGroup = parcheStore.addGroup(parche.value.id, trimmedName, color)
+    const newGroup = parcheStore.addGroup(parche.value.id, capitalizedName, color)
     // Set new group as expanded
     groupExpandedState.value[newGroup.id] = true
     showAddGroupModal.value = false
@@ -535,9 +539,12 @@ function handleEditGroup() {
     return
   }
 
+  // Capitalize group name
+  const capitalizedName = capitalizeWords(trimmedName)
+
   try {
     parcheStore.updateGroup(parche.value.id, selectedGroupId.value, {
-      name: trimmedName,
+      name: capitalizedName,
       color: editGroupColor.value,
     })
     showEditGroupModal.value = false
@@ -568,8 +575,12 @@ function openAddPerson(groupId: string) {
 function handleAddPerson() {
   if (!parche.value || !selectedGroupId.value) return
   personError.value = ''
+
+  // Capitalize person name
+  const capitalizedName = capitalizeWords(newPersonName.value)
+
   try {
-    parcheStore.addPerson(parche.value.id, selectedGroupId.value, newPersonName.value)
+    parcheStore.addPerson(parche.value.id, selectedGroupId.value, capitalizedName)
     showAddPersonModal.value = false
     newPersonName.value = ''
   } catch (error) {
@@ -590,9 +601,13 @@ function openEditPerson(personId: string) {
 function handleEditPerson() {
   if (!parche.value || !selectedPersonId.value) return
   personError.value = ''
+
+  // Capitalize person name
+  const capitalizedName = capitalizeWords(editPersonName.value)
+
   try {
     parcheStore.updatePerson(parche.value.id, selectedPersonId.value, {
-      name: editPersonName.value,
+      name: capitalizedName,
     })
     showEditPersonModal.value = false
   } catch (error) {
