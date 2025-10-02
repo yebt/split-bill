@@ -11,11 +11,11 @@ const siteTitle = 'Split Bill'
 const siteDescription =
   'Easily split bills and manage expenses with your friends. Track who owes what and settle up with your parche.'
 const siteUrl = import.meta.env.VITE_SITE_URL || 'https://split-bill.app'
-const ogImage = `${siteUrl}/og-image.png`
+const ogImage = `${siteUrl}/preivew/og-image.jpg`
 
 useHead({
   title: siteTitle,
-  titleTemplate: (title) => (title ? `${title} | ${siteTitle}` : siteTitle),
+  // titleTemplate: (title) => (title ? `${title} | ${siteTitle}` : siteTitle),
   meta: [
     // Basic meta tags
     { name: 'description', content: siteDescription },
