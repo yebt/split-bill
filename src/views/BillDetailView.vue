@@ -80,7 +80,7 @@
             <div class="flex items-center justify-between text-xl font-bold">
               <span>Total</span>
               <span class="text-blue-600 dark:text-blue-400"
-                >${billStore.currentBillTotal.toFixed(2)}</span
+                >${{ billStore.currentBillTotal.toFixed(2) }}</span
               >
             </div>
           </div>
