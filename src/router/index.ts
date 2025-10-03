@@ -54,11 +54,11 @@ const router = createRouter({
   ],
 })
 
-// router.beforeEach((to, from) => {
-//   if (to.name === 'not-found') {
-//     return { name: 'home' }
-//   }
-// })
+router.beforeEach((to, from) => {
+  if (to.name === 'not-found') {
+    return { name: 'home' }
+  }
+})
 
 // router.beforeResolve((to, from, next) => {
 //   if (document.startViewTransition) {
@@ -67,6 +67,5 @@ const router = createRouter({
 //     next()
 //   }
 // })
-
 
 export default router

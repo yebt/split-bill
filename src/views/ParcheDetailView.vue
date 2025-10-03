@@ -12,7 +12,9 @@
           >
             <div class="i-lucide-arrow-left text-2xl" />
           </button>
-          <h1 class="flex-1 text-2xl font-bold">{{ parche.name }}</h1>
+          <h1 class="flex-1 text-2xl font-bold">
+            {{ parche.name }}
+          </h1>
           <BaseButton variant="ghost" size="sm" @click="themeStore.toggleTheme()">
             <div
               :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
@@ -97,76 +99,82 @@
           </BaseButton>
         </div>
 
-        <div v-for="group in parche.groups" :key="group.id" class="space-y-3">
-          <BaseAccordion
-            v-model="groupExpandedState[group.id]"
-            :title="group.name"
-            :color="group.color"
-            :badge="group.people.length"
-          >
-            <template #actions>
-              <BaseButton variant="ghost" size="sm" @click.stop="openEditGroup(group.id)">
-                <div class="i-lucide-edit text-lg text-white" />
-              </BaseButton>
-              <BaseButton
-                v-if="parche.groups.length > 1"
-                variant="ghost"
-                size="sm"
-                @click.stop="confirmDeleteGroup(group.id)"
-              >
-                <div class="i-lucide-trash text-lg text-white" />
-              </BaseButton>
-            </template>
+        <TransitionGroup name="list" tag="section" class="space-y-4">
+          <div v-for="group in parche.groups" :key="group.id" class="space-y-3">
+            <BaseAccordion
+              v-model="groupExpandedState[group.id]"
+              :title="group.name"
+              :color="group.color"
+              :badge="group.people.length"
+            >
+              <template #actions>
+                <BaseButton variant="ghost" size="sm" @click.stop="openEditGroup(group.id)">
+                  <div class="i-lucide-edit text-lg text-white" />
+                </BaseButton>
+                <BaseButton
+                  v-if="parche.groups.length > 1"
+                  variant="ghost"
+                  size="sm"
+                  @click.stop="confirmDeleteGroup(group.id)"
+                >
+                  <div class="i-lucide-trash text-lg text-white" />
+                </BaseButton>
+              </template>
 
-            <!-- People in Group -->
-            <div class="space-y-2">
-              <div
-                v-for="person in group.people"
-                :key="person.id"
-                class="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
-              >
-                <div class="flex items-center gap-3">
-                  <button
-                    :class="[
-                      'flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors',
-                      person.active
-                        ? 'border-green-500 bg-green-500'
-                        : 'border-gray-300 bg-gray-300 dark:border-gray-600 dark:bg-gray-600',
-                    ]"
-                    @click="parcheStore.togglePersonActive(parche.id, person.id)"
+              <!-- People in Group -->
+              <div class="space-y-2">
+                <TransitionGroup name="list" tag="section" class="space-y-2">
+                  <div
+                    v-for="person in group.people"
+                    :key="person.id"
+                    class="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
                   >
-                    <div v-if="person.active" class="i-lucide-check text-sm text-white" />
-                  </button>
-                  <span
-                    :class="person.active ? '' : 'text-gray-500 line-through dark:text-gray-400'"
-                  >
-                    {{ person.name }}
-                  </span>
-                </div>
-                <div class="flex gap-2">
-                  <BaseButton variant="ghost" size="sm" @click="openEditPerson(person.id)">
-                    <div class="i-lucide-edit text-base" />
-                  </BaseButton>
-                  <BaseButton
-                    variant="ghost"
-                    size="sm"
-                    @click="openMovePerson(person.id, group.id)"
-                  >
-                    <div class="i-lucide-move text-base" />
-                  </BaseButton>
-                  <BaseButton variant="ghost" size="sm" @click="confirmDeletePerson(person.id)">
-                    <div class="i-lucide-trash text-base" />
-                  </BaseButton>
-                </div>
+                    <div class="flex items-center gap-3">
+                      <button
+                        :class="[
+                          'flex h-6 w-6 items-center justify-center rounded-full border-2 transition-colors',
+                          person.active
+                            ? 'border-green-500 bg-green-500'
+                            : 'border-gray-300 bg-gray-300 dark:border-gray-600 dark:bg-gray-600',
+                        ]"
+                        @click="parcheStore.togglePersonActive(parche.id, person.id)"
+                      >
+                        <div v-if="person.active" class="i-lucide-check text-sm text-white" />
+                      </button>
+                      <span
+                        :class="
+                          person.active ? '' : 'text-gray-500 line-through dark:text-gray-400'
+                        "
+                      >
+                        {{ person.name }}
+                      </span>
+                    </div>
+                    <div class="flex gap-2">
+                      <BaseButton variant="ghost" size="sm" @click="openEditPerson(person.id)">
+                        <div class="i-lucide-edit text-base" />
+                      </BaseButton>
+                      <BaseButton
+                        variant="ghost"
+                        size="sm"
+                        @click="openMovePerson(person.id, group.id)"
+                      >
+                        <div class="i-lucide-move text-base" />
+                      </BaseButton>
+                      <BaseButton variant="ghost" size="sm" @click="confirmDeletePerson(person.id)">
+                        <div class="i-lucide-trash text-base" />
+                      </BaseButton>
+                    </div>
+                  </div>
+                </TransitionGroup>
+
+                <BaseButton variant="ghost" full-width @click="openAddPerson(group.id)">
+                  <div class="i-lucide-plus text-lg" />
+                  <span class="hidden sm:inline">Add Person</span>
+                </BaseButton>
               </div>
-
-              <BaseButton variant="ghost" full-width @click="openAddPerson(group.id)">
-                <div class="i-lucide-plus text-lg" />
-                <span class="hidden sm:inline">Add Person</span>
-              </BaseButton>
-            </div>
-          </BaseAccordion>
-        </div>
+            </BaseAccordion>
+          </div>
+        </TransitionGroup>
       </div>
 
       <!-- Bills Tab -->
@@ -350,7 +358,7 @@
       <div class="space-y-2">
         <p class="mb-4 text-sm text-gray-600 dark:text-gray-400">Select target group:</p>
         <BaseButton
-          v-for="group in parche.groups.filter((g) => g.id !== selectedGroupId)"
+          v-for="group in parche.groups.filter((g: Group) => g.id !== selectedGroupId)"
           :key="group.id"
           variant="ghost"
           full-width
@@ -389,7 +397,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { useParcheStore } from '@/stores/parcheStore'
 import { useBillStore } from '@/stores/billStore'
 import { useThemeStore } from '@/stores/themeStore'
-import { getRandomUnusedColor } from '@/types/domain'
+import { getRandomUnusedColor, type Group } from '@/types/domain'
 import { capitalizeWords } from '@/utils/text'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'

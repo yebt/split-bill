@@ -135,7 +135,7 @@
           <div class="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
             <div class="flex items-center justify-between text-lg font-bold">
               <span>Total</span>
-              <span class="text-blue-600 dark:text-blue-400">${{total.toFixed(2)}}</span>
+              <span class="text-blue-600 dark:text-blue-400">${{ total.toFixed(2) }}</span>
             </div>
           </div>
         </BaseCard>

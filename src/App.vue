@@ -28,7 +28,7 @@ useHead({
       content: 'split bill, expense tracker, bill splitting, group expenses, parche',
     },
     { name: 'author', content: 'Split Bill' },
-    { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
+    // { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
     { name: 'theme-color', content: '#2563eb' },
 
     // Open Graph / Facebook

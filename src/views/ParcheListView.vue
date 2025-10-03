@@ -1,180 +1,5 @@
-<template>
-  <div class="min-h-screen">
-    <!-- Header -->
-    <header
-      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
-    >
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        <div class="flex items-center gap-3">
-          <!-- <div class="i-lucide-receipt text-3xl text-blue-600 dark:text-blue-400" /> -->
-          <div>
-            <img src="@/assets/logo.svg" alt="Logo" class="h-10 w-10" />
-          </div>
-          <h1 class="text-2xl font-bold">Split Bill</h1>
-        </div>
-        <div class="flex items-center gap-2">
-          <BaseButton variant="ghost" size="sm" @click="handleImport">
-            <div class="i-lucide-upload text-lg" />
-          </BaseButton>
-          <BaseButton variant="ghost" size="sm" @click="handleExport">
-            <div class="i-lucide-download text-lg" />
-          </BaseButton>
-          <BaseButton variant="ghost" size="sm" @click="themeStore.toggleTheme()">
-            <div
-              :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
-              class="text-lg"
-            />
-          </BaseButton>
-        </div>
-      </div>
-    </header>
-
-    <!-- Main Content -->
-    <main class="mx-auto max-w-7xl px-4 py-6">
-      <!-- Empty State -->
-      <div v-if="parcheStore.parches.length === 0" class="py-16 text-center">
-        <div class="i-lucide-users mx-auto mb-4 text-6xl text-gray-300 dark:text-gray-600" />
-        <h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-300">No parches yet</h2>
-        <p class="mb-6 text-gray-500 dark:text-gray-400">
-          Create your first parche to start splitting bills
-        </p>
-        <BaseButton @click="showCreateModal = true">
-          <div class="i-lucide-plus text-lg" />
-          Create Parche
-        </BaseButton>
-      </div>
-
-      <!-- Parche List -->
-      <div v-else>
-        <div class="mb-6 flex items-center justify-between">
-          <h2 class="text-xl font-semibold">Your Parches</h2>
-          <BaseButton @click="showCreateModal = true">
-            <div class="i-lucide-plus text-lg" />
-            New Parche
-          </BaseButton>
-        </div>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <BaseCard
-            v-for="parche in parcheStore.parches"
-            :key="parche.id"
-            clickable
-            @click="goToParche(parche.id)"
-          >
-            <div class="mb-3 flex items-start justify-between">
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                {{ parche.name }}
-              </h3>
-              <button
-                class="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
-                @click.stop="openOptionsMenu(parche.id)"
-              >
-                <div class="i-lucide-more-vertical text-xl" />
-              </button>
-            </div>
-
-            <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
-              <div class="flex items-center gap-2">
-                <div class="i-lucide-users text-base" />
-                <span
-                  >{{ getParcheStats(parche).totalPeople }} people ({{
-                    getParcheStats(parche).activePeople
-                  }}
-                  active)</span
-                >
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="i-lucide-layers text-base" />
-                <span>{{ parche.groups.length }} groups</span>
-              </div>
-              <div class="flex items-center gap-2">
-                <div class="i-lucide-receipt text-base" />
-                <span>{{ parche.bills.length }} bills</span>
-              </div>
-            </div>
-          </BaseCard>
-        </div>
-      </div>
-    </main>
-
-    <!-- Create Parche Modal -->
-    <BaseModal v-model="showCreateModal" title="Create New Parche">
-      <form @submit.prevent="handleCreate">
-        <BaseInput
-          v-model="newParcheName"
-          label="Parche Name"
-          placeholder="e.g., Weekend Trip, Dinner Party"
-          required
-          autofocus
-          :error="createError"
-        />
-      </form>
-      <template #footer>
-        <div class="flex justify-end gap-2">
-          <BaseButton variant="ghost" @click="showCreateModal = false">Cancel</BaseButton>
-          <BaseButton @click="handleCreate">Create</BaseButton>
-        </div>
-      </template>
-    </BaseModal>
-
-    <!-- Options Menu Modal -->
-    <BaseModal v-model="showOptionsModal" title="Parche Options">
-      <div class="space-y-2">
-        <BaseButton variant="ghost" full-width @click="handleDuplicate">
-          <div class="i-lucide-copy text-lg" />
-          Duplicate
-        </BaseButton>
-        <BaseButton variant="danger" full-width @click="confirmDelete">
-          <div class="i-lucide-trash text-lg" />
-          Delete
-        </BaseButton>
-      </div>
-    </BaseModal>
-
-    <!-- Duplicate Modal -->
-    <BaseModal v-model="showDuplicateModal" title="Duplicate Parche">
-      <form @submit.prevent="handleDuplicateSubmit">
-        <BaseInput
-          v-model="duplicateName"
-          label="New Parche Name"
-          placeholder="Enter name for duplicated parche"
-          required
-          autofocus
-          :error="duplicateError"
-        />
-      </form>
-      <template #footer>
-        <div class="flex justify-end gap-2">
-          <BaseButton variant="ghost" @click="showDuplicateModal = false">Cancel</BaseButton>
-          <BaseButton @click="handleDuplicateSubmit">Duplicate</BaseButton>
-        </div>
-      </template>
-    </BaseModal>
-
-    <!-- Delete Confirmation -->
-    <ConfirmDialog
-      v-model="showDeleteConfirm"
-      title="Delete Parche"
-      message="Are you sure you want to delete this parche? This action cannot be undone."
-      confirm-text="Delete"
-      confirm-variant="danger"
-      @confirm="handleDelete"
-    />
-
-    <!-- Import Input -->
-    <input
-      ref="importInput"
-      type="file"
-      accept="application/json"
-      class="hidden"
-      @change="handleImportFile"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { computed, ref } from 'vue'
 import { useParcheStore } from '@/stores/parcheStore'
 import { useThemeStore } from '@/stores/themeStore'
 import type { Parche } from '@/types/domain'
@@ -185,8 +10,9 @@ import BaseModal from '@/components/BaseModal.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
-const router = useRouter()
 const parcheStore = useParcheStore()
+const parchesList = computed<Parche[]>(() => parcheStore.parches)
+
 const themeStore = useThemeStore()
 
 const showCreateModal = ref(false)
@@ -212,9 +38,9 @@ function getParcheStats(parche: Parche) {
   }
 }
 
-function goToParche(id: string) {
-  router.push({ name: 'parche-detail', params: { id } })
-}
+// function goToParche(id: string) {
+//   router.push({ name: 'parche-detail', params: { id } })
+// }
 
 function handleCreate() {
   createError.value = ''
@@ -323,3 +149,174 @@ function handleImportFile(event: Event) {
   target.value = ''
 }
 </script>
+
+<template>
+  <div class="min-h-screen">
+    <!-- Header -->
+    <header
+      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
+    >
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
+        <div class="flex items-center gap-3">
+          <!-- <div class="i-lucide-receipt text-3xl text-blue-600 dark:text-blue-400" /> -->
+          <div>
+            <img src="@/assets/logo.svg" alt="Logo" class="h-10 w-10" />
+          </div>
+          <h1 class="text-2xl font-bold">Split Bill</h1>
+        </div>
+        <div class="flex items-center gap-2">
+          <BaseButton variant="ghost" size="sm" @click="handleImport">
+            <div class="i-lucide-upload text-lg" />
+          </BaseButton>
+          <BaseButton variant="ghost" size="sm" @click="handleExport">
+            <div class="i-lucide-download text-lg" />
+          </BaseButton>
+          <BaseButton variant="ghost" size="sm" @click="themeStore.toggleTheme()">
+            <div
+              :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
+              class="text-lg"
+            />
+          </BaseButton>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="mx-auto max-w-7xl px-4 py-6">
+      <!-- Empty State -->
+      <div v-if="parcheStore.parches.length === 0" class="py-16 text-center">
+        <div class="i-lucide-users mx-auto mb-4 text-6xl text-gray-300 dark:text-gray-600" />
+        <h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-300">No parches yet</h2>
+        <p class="mb-6 text-gray-500 dark:text-gray-400">
+          Create your first parche to start splitting bills
+        </p>
+        <BaseButton @click="showCreateModal = true">
+          <div class="i-lucide-plus text-lg" />
+          Create Parche
+        </BaseButton>
+      </div>
+
+      <!-- Parche List -->
+      <div v-else>
+        <div class="mb-6 flex items-center justify-between">
+          <h2 class="text-xl font-semibold">Your Parches</h2>
+          <BaseButton @click="showCreateModal = true">
+            <div class="i-lucide-plus text-lg" />
+            New Parche
+          </BaseButton>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <BaseCard v-for="parche in parchesList" :key="parche.id" clickable>
+            <RouterLink :to="{ name: 'parche-detail', params: { id: parche.id } }">
+              <div class="mb-3 flex items-start justify-between">
+                <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
+                  {{ parche.name }}
+                </h3>
+                <button
+                  class="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
+                  @click.stop="openOptionsMenu(parche.id)"
+                >
+                  <div class="i-lucide-more-vertical text-xl" />
+                </button>
+              </div>
+
+              <div class="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                <div class="flex items-center gap-2">
+                  <div class="i-lucide-users text-base" />
+                  <span
+                    >{{ getParcheStats(parche).totalPeople }} people ({{
+                      getParcheStats(parche).activePeople
+                    }}
+                    active)</span
+                  >
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="i-lucide-layers text-base" />
+                  <span>{{ parche.groups.length }} groups</span>
+                </div>
+                <div class="flex items-center gap-2">
+                  <div class="i-lucide-receipt text-base" />
+                  <span>{{ parche.bills.length }} bills</span>
+                </div>
+              </div>
+            </RouterLink>
+          </BaseCard>
+        </div>
+      </div>
+    </main>
+
+    <!-- Create Parche Modal -->
+    <BaseModal v-model="showCreateModal" title="Create New Parche">
+      <form @submit.prevent="handleCreate">
+        <BaseInput
+          v-model="newParcheName"
+          label="Parche Name"
+          placeholder="e.g., Weekend Trip, Dinner Party"
+          required
+          autofocus
+          :error="createError"
+        />
+      </form>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <BaseButton variant="ghost" @click="showCreateModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleCreate">Create</BaseButton>
+        </div>
+      </template>
+    </BaseModal>
+
+    <!-- Options Menu Modal -->
+    <BaseModal v-model="showOptionsModal" title="Parche Options">
+      <div class="space-y-2">
+        <BaseButton variant="ghost" full-width @click="handleDuplicate">
+          <div class="i-lucide-copy text-lg" />
+          Duplicate
+        </BaseButton>
+        <BaseButton variant="danger" full-width @click="confirmDelete">
+          <div class="i-lucide-trash text-lg" />
+          Delete
+        </BaseButton>
+      </div>
+    </BaseModal>
+
+    <!-- Duplicate Modal -->
+    <BaseModal v-model="showDuplicateModal" title="Duplicate Parche">
+      <form @submit.prevent="handleDuplicateSubmit">
+        <BaseInput
+          v-model="duplicateName"
+          label="New Parche Name"
+          placeholder="Enter name for duplicated parche"
+          required
+          autofocus
+          :error="duplicateError"
+        />
+      </form>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <BaseButton variant="ghost" @click="showDuplicateModal = false">Cancel</BaseButton>
+          <BaseButton @click="handleDuplicateSubmit">Duplicate</BaseButton>
+        </div>
+      </template>
+    </BaseModal>
+
+    <!-- Delete Confirmation -->
+    <ConfirmDialog
+      v-model="showDeleteConfirm"
+      title="Delete Parche"
+      message="Are you sure you want to delete this parche? This action cannot be undone."
+      confirm-text="Delete"
+      confirm-variant="danger"
+      @confirm="handleDelete"
+    />
+
+    <!-- Import Input -->
+    <input
+      ref="importInput"
+      type="file"
+      accept="application/json"
+      class="hidden"
+      @change="handleImportFile"
+    />
+  </div>
+</template>
