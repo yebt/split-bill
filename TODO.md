@@ -1,4 +1,4 @@
-- ~~manage 404~~ 
+- ~~manage 404~~
 - ~~auto capitalize names of persons~~
 - ~~auto capitalize names of groups~~
 - ~~add some view transitions.~~
@@ -7,3 +7,5 @@
 - Put icons in the modal of creation to fastly understand what i edit or create
 - Decrease the view transition time
 - Add group transitions when add and remove elements (resalt briefly the new entity)
+- add masks to number inputs
+- apply money mask to the amount of bills
