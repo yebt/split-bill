@@ -1,10 +1,24 @@
 <script setup lang="ts">
-import { RouterView } from 'vue-router'
+import { defineAsyncComponent } from 'vue'
+import { useRouter } from 'vue-router'
 import { useThemeStore } from '@/stores/themeStore'
 import { useHead } from '@unhead/vue'
+import SplashScreen from '@/components/SplashScreen.vue'
 
 // Initialize theme store
 useThemeStore()
+
+// Get router instance
+const router = useRouter()
+
+// Define async component that waits for router to be ready
+const AppMain = defineAsyncComponent({
+  loader: async () => {
+    await router.isReady()
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+    return import('@/components/AppMain.vue')
+  },
+})
 
 // Configure SEO and social media meta tags
 const siteTitle = 'Split Bill'
@@ -66,13 +80,12 @@ useHead({
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
-    <RouterView v-slot="{ Component, route }">
-      <Transition name="fade-fast" mode="out-in">
-        <component :is="Component" :key="route.path" />
-      </Transition>
-    </RouterView>
-  </div>
+  <Suspense>
+    <AppMain />
+    <template #fallback>
+      <SplashScreen />
+    </template>
+  </Suspense>
 </template>
 
 <style></style>
