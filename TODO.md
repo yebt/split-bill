@@ -9,3 +9,4 @@
 - Add group transitions when add and remove elements (resalt briefly the new entity)
 - add masks to number inputs
 - apply money mask to the amount of bills
+- Add splash screen for when is loading the application
