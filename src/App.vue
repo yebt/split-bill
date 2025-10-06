@@ -15,7 +15,7 @@ const router = useRouter()
 const AppMain = defineAsyncComponent({
   loader: async () => {
     await router.isReady()
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 300))
     return import('@/components/AppMain.vue')
   },
 })
