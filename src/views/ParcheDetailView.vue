@@ -202,8 +202,15 @@ function handleAddPerson() {
   if (!parche.value || !selectedGroupId.value) return
   personError.value = ''
 
+  // Validate person name
+  const trimmedName = newPersonName.value.trim()
+  if (!trimmedName) {
+    personError.value = 'Person name is required'
+    return
+  }
+
   // Capitalize person name
-  const capitalizedName = capitalizeWords(newPersonName.value)
+  const capitalizedName = capitalizeWords(trimmedName)
 
   try {
     parcheStore.addPerson(parche.value.id, selectedGroupId.value, capitalizedName)
@@ -220,6 +227,7 @@ function openEditPerson(personId: string) {
   if (person) {
     selectedPersonId.value = personId
     editPersonName.value = person.name
+    personError.value = ''
     showEditPersonModal.value = true
   }
 }
@@ -228,8 +236,15 @@ function handleEditPerson() {
   if (!parche.value || !selectedPersonId.value) return
   personError.value = ''
 
+  // Validate person name
+  const trimmedName = editPersonName.value.trim()
+  if (!trimmedName) {
+    personError.value = 'Person name is required'
+    return
+  }
+
   // Capitalize person name
-  const capitalizedName = capitalizeWords(editPersonName.value)
+  const capitalizedName = capitalizeWords(trimmedName)
 
   try {
     parcheStore.updatePerson(parche.value.id, selectedPersonId.value, {
