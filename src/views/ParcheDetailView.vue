@@ -301,7 +301,7 @@ function shareAsText() {
 </script>
 
 <template>
-  <div v-if="parche" class="min-h-screen">
+  <div v-if="parche" class="grid min-h-screen grid-rows-[auto_1fr_auto]">
     <!-- Header -->
     <header
       class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -344,7 +344,7 @@ function shareAsText() {
     </header>
 
     <!-- Main Content -->
-    <main class="mx-auto max-w-7xl px-4 py-6">
+    <main class="mx-auto grid w-full max-w-7xl grid-rows-[auto_1fr_auto] px-4 py-6">
       <!-- Tabs -->
       <div class="mb-6 flex gap-2 border-b border-gray-200 dark:border-gray-700">
         <button
@@ -383,7 +383,7 @@ function shareAsText() {
       </div>
 
       <!-- People & Groups Tab -->
-      <div v-if="activeTab === 'people'" class="h-full space-y-4 overflow-hidden">
+      <div v-if="activeTab === 'people'" class="space-y-4 overflow-hidden">
         <div class="flex items-center justify-between">
           <div class="flex gap-2">
             <BaseButton variant="ghost" size="sm" @click="expandAllGroups">
