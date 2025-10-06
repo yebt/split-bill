@@ -222,7 +222,7 @@
             </div>
             <div class="text-right">
               <div class="text-xl font-bold text-gray-900 dark:text-gray-100">
-                ${{ billStore.getBillTotal(bill.id).toFixed(2) }}
+                {{ formatCurrency(billStore.getBillTotal(bill.id)) }}
               </div>
             </div>
           </div>
@@ -247,7 +247,7 @@
             >
               <span class="font-medium">{{ person.name }}</span>
               <span class="text-lg font-bold text-blue-600 dark:text-blue-400">
-                ${{ (parcheTotals.get(person.id) || 0).toFixed(2) }}
+                {{ formatCurrency(parcheTotals.get(person.id) || 0) }}
               </span>
             </div>
           </div>
@@ -255,7 +255,7 @@
           <div class="mt-6 border-t border-gray-200 pt-6 dark:border-gray-700">
             <div class="flex items-center justify-between text-xl font-bold">
               <span>Total</span>
-              <span class="text-blue-600 dark:text-blue-400">${{ totalAmount.toFixed(2) }}</span>
+              <span class="text-blue-600 dark:text-blue-400">{{ formatCurrency(totalAmount) }}</span>
             </div>
           </div>
 
@@ -399,6 +399,7 @@ import { useBillStore } from '@/stores/billStore'
 import { useThemeStore } from '@/stores/themeStore'
 import { getRandomUnusedColor, type Group } from '@/types/domain'
 import { capitalizeWords } from '@/utils/text'
+import { formatCurrency } from '@/utils/currency'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import BaseAccordion from '@/components/BaseAccordion.vue'
@@ -653,10 +654,10 @@ function shareAsText() {
 
   parcheStore.currentParcheAllPeople.forEach((person) => {
     const amount = parcheTotals.value.get(person.id) || 0
-    text += `${person.name}: $${amount.toFixed(2)}\n`
+    text += `${person.name}: ${formatCurrency(amount)}\n`
   })
 
-  text += `\n📊 Total: $${totalAmount.value.toFixed(2)}`
+  text += `\n📊 Total: ${formatCurrency(totalAmount.value)}`
 
   if (navigator.share) {
     navigator.share({ text })

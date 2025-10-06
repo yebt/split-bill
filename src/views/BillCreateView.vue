@@ -89,8 +89,8 @@
                 <div class="flex-1">
                   <div class="font-medium">{{ product.name }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ product.quantity }} × ${{ product.price.toFixed(2) }} = ${{
-                      (product.quantity * product.price).toFixed(2)
+                    {{ product.quantity }} × {{ formatCurrency(product.price) }} = {{
+                      formatCurrency(product.quantity * product.price)
                     }}
                   </div>
                 </div>
@@ -135,7 +135,7 @@
           <div class="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
             <div class="flex items-center justify-between text-lg font-bold">
               <span>Total</span>
-              <span class="text-blue-600 dark:text-blue-400">${{ total.toFixed(2) }}</span>
+              <span class="text-blue-600 dark:text-blue-400">{{ formatCurrency(total) }}</span>
             </div>
           </div>
         </BaseCard>
@@ -175,7 +175,7 @@
             >
               <span>{{ person.name }}</span>
               <span class="font-bold text-blue-600 dark:text-blue-400">
-                ${{ calculatePersonAmount(person.id).toFixed(2) }}
+                {{ formatCurrency(calculatePersonAmount(person.id)) }}
               </span>
             </div>
           </div>
@@ -247,6 +247,7 @@ import BaseCard from '@/components/BaseCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import CurrencyInput from '@/components/shared/CurrencyInput.vue'
+import { formatCurrency } from '@/utils/currency'
 
 const router = useRouter()
 const route = useRoute()

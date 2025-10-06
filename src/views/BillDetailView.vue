@@ -53,8 +53,8 @@
                 <div class="flex-1">
                   <div class="font-medium">{{ product.name }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ product.quantity }} × ${{ product.price.toFixed(2) }} = ${{
-                      (product.quantity * product.price).toFixed(2)
+                    {{ product.quantity }} × {{ formatCurrency(product.price) }} = {{
+                      formatCurrency(product.quantity * product.price)
                     }}
                   </div>
                 </div>
@@ -80,7 +80,7 @@
             <div class="flex items-center justify-between text-xl font-bold">
               <span>Total</span>
               <span class="text-blue-600 dark:text-blue-400"
-                >${{ billStore.currentBillTotal.toFixed(2) }}</span
+                >{{ formatCurrency(billStore.currentBillTotal) }}</span
               >
             </div>
           </div>
@@ -119,7 +119,7 @@
                 <span class="font-medium">{{ getPersonName(personId) }}</span>
               </div>
               <span class="text-lg font-bold text-blue-600 dark:text-blue-400">
-                ${{ amount.toFixed(2) }}
+                {{ formatCurrency(amount) }}
               </span>
             </div>
           </div>
@@ -158,6 +158,7 @@ import { useBillStore } from '@/stores/billStore'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
+import { formatCurrency } from '@/utils/currency'
 
 const router = useRouter()
 const route = useRoute()
@@ -206,14 +207,14 @@ function shareAsText() {
 
   text += `📦 Products:\n`
   bill.value.products.forEach((product) => {
-    text += `  • ${product.name}: ${product.quantity} × $${product.price.toFixed(2)} = $${(product.quantity * product.price).toFixed(2)}\n`
+    text += `  • ${product.name}: ${product.quantity} × ${formatCurrency(product.price)} = ${formatCurrency(product.quantity * product.price)}\n`
   })
 
-  text += `\n💰 Total: $${billStore.currentBillTotal.toFixed(2)}\n\n`
+  text += `\n💰 Total: ${formatCurrency(billStore.currentBillTotal)}\n\n`
 
   text += `👥 Split:\n`
   billStore.currentBillSplit.forEach((amount, personId) => {
-    text += `  • ${getPersonName(personId)}: $${amount.toFixed(2)}\n`
+    text += `  • ${getPersonName(personId)}: ${formatCurrency(amount)}\n`
   })
 
   if (navigator.share) {
