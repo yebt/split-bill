@@ -279,7 +279,7 @@ function handleDeletePerson() {
   selectedPersonId.value = null
 }
 
-function shareAsText() {
+async function shareAsText() {
   if (!parche.value) return
 
   let text = `💰 ${parche.value.name} - Expense Summary\n\n`
@@ -291,17 +291,25 @@ function shareAsText() {
 
   text += `\n📊 Total: ${formatCurrency(totalAmount.value)}`
 
-  if (navigator.share) {
-    navigator.share({ text })
+  if (navigator.share && navigator.canShare({ text })) {
+    try {
+      await navigator.share({ text })
+    } catch (error) {
+      // User cancelled or error occurred, fallback to clipboard
+      if (error instanceof Error && error.name !== 'AbortError') {
+        await navigator.clipboard.writeText(text)
+        alert('Summary copied to clipboard!')
+      }
+    }
   } else {
-    navigator.clipboard.writeText(text)
+    await navigator.clipboard.writeText(text)
     alert('Summary copied to clipboard!')
   }
 }
 </script>
 
 <template>
-  <div v-if="parche" class="grid min-h-screen grid-rows-[auto_1fr_auto]">
+  <div v-if="parche" class="grid min-h-dvh grid-rows-[auto_1fr_auto]">
     <!-- Header -->
     <header
       class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"

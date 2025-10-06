@@ -1,5 +1,5 @@
 <template>
-  <div v-if="bill && parche" class="min-h-screen">
+  <div v-if="bill && parche" class="min-h-dvh">
     <!-- Header -->
     <header
       class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -53,9 +53,8 @@
                 <div class="flex-1">
                   <div class="font-medium">{{ product.name }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ product.quantity }} × {{ formatCurrency(product.price) }} = {{
-                      formatCurrency(product.quantity * product.price)
-                    }}
+                    {{ product.quantity }} × {{ formatCurrency(product.price) }} =
+                    {{ formatCurrency(product.quantity * product.price) }}
                   </div>
                 </div>
               </div>
@@ -79,9 +78,9 @@
           <div class="mt-4 border-t border-gray-200 pt-4 dark:border-gray-700">
             <div class="flex items-center justify-between text-xl font-bold">
               <span>Total</span>
-              <span class="text-blue-600 dark:text-blue-400"
-                >{{ formatCurrency(billStore.currentBillTotal) }}</span
-              >
+              <span class="text-blue-600 dark:text-blue-400">{{
+                formatCurrency(billStore.currentBillTotal)
+              }}</span>
             </div>
           </div>
         </BaseCard>
@@ -199,7 +198,7 @@ function getPersonActive(personId: string): boolean {
   return person?.active || false
 }
 
-function shareAsText() {
+async function shareAsText() {
   if (!bill.value || !parche.value) return
 
   let text = `🧾 Bill from ${parche.value.name}\n`
@@ -217,10 +216,18 @@ function shareAsText() {
     text += `  • ${getPersonName(personId)}: ${formatCurrency(amount)}\n`
   })
 
-  if (navigator.share) {
-    navigator.share({ text })
+  if (navigator.share && navigator.canShare({ text })) {
+    try {
+      await navigator.share({ text })
+    } catch (error) {
+      // User cancelled or error occurred, fallback to clipboard
+      if (error instanceof Error && error.name !== 'AbortError') {
+        await navigator.clipboard.writeText(text)
+        alert('Bill details copied to clipboard!')
+      }
+    }
   } else {
-    navigator.clipboard.writeText(text)
+    await navigator.clipboard.writeText(text)
     alert('Bill details copied to clipboard!')
   }
 }
