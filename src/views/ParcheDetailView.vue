@@ -411,7 +411,9 @@ function shareAsText() {
             >
               <template #actions>
                 <BaseButton variant="ghost" size="sm" @click.stop="openEditGroup(group.id)">
-                  <div class="i-lucide-edit text-lg text-white" />
+                  <div
+                    class="i-lucide-edit text-lg text-white group-hover/basebutton:text-gray-600"
+                  />
                 </BaseButton>
                 <BaseButton
                   v-if="parche.groups.length > 1"
@@ -419,7 +421,9 @@ function shareAsText() {
                   size="sm"
                   @click.stop="confirmDeleteGroup(group.id)"
                 >
-                  <div class="i-lucide-trash text-lg text-white" />
+                  <div
+                    class="i-lucide-trash text-lg text-white group-hover/basebutton:text-gray-600"
+                  />
                 </BaseButton>
               </template>
 
