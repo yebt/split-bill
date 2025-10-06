@@ -16,7 +16,8 @@
     "lint:oxlint": "oxlint . --fix -D correctness --ignore-path .gitignore",
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "surge": "surge ./dist"
   },
   "dependencies": {
     "@unhead/vue": "^2.0.17",
