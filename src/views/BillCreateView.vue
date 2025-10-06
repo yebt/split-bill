@@ -1,5 +1,5 @@
 <template>
-  <div v-if="parche" class="min-h-screen">
+  <div v-if="parche" class="min-h-dvh">
     <!-- Header -->
     <header
       class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
@@ -89,9 +89,8 @@
                 <div class="flex-1">
                   <div class="font-medium">{{ product.name }}</div>
                   <div class="text-sm text-gray-600 dark:text-gray-400">
-                    {{ product.quantity }} × {{ formatCurrency(product.price) }} = {{
-                      formatCurrency(product.quantity * product.price)
-                    }}
+                    {{ product.quantity }} × {{ formatCurrency(product.price) }} =
+                    {{ formatCurrency(product.quantity * product.price) }}
                   </div>
                 </div>
                 <div class="flex gap-2">
@@ -217,11 +216,7 @@
             :step="1"
             required
           />
-          <CurrencyInput
-            v-model="productForm.price"
-            label="Price"
-            required
-          />
+          <CurrencyInput v-model="productForm.price" label="Price" required />
         </div>
       </form>
       <template #footer>
