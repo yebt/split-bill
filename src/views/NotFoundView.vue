@@ -1,5 +1,5 @@
 <template>
-  <div class="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+  <div class="flex min-h-dvh items-center justify-center bg-gray-50 dark:bg-gray-900">
     <div class="text-center">
       <div class="i-lucide-search-x mx-auto mb-6 text-8xl text-gray-300 dark:text-gray-600" />
       <h1 class="mb-2 text-6xl font-bold text-gray-900 dark:text-gray-100">404</h1>
