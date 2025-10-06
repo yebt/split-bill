@@ -217,12 +217,9 @@
             :step="1"
             required
           />
-          <BaseInput
+          <CurrencyInput
             v-model="productForm.price"
-            type="number"
             label="Price"
-            :min="0"
-            :step="0.01"
             required
           />
         </div>
@@ -249,6 +246,7 @@ import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import BaseInput from '@/components/BaseInput.vue'
+import CurrencyInput from '@/components/shared/CurrencyInput.vue'
 
 const router = useRouter()
 const route = useRoute()
