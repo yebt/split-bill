@@ -586,7 +586,7 @@ async function shareAsText() {
     </main>
 
     <!-- Add Group Modal -->
-    <BaseModal v-model="showAddGroupModal" title="Add Group">
+    <BaseModal v-model="showAddGroupModal" title="Add Group" icon="i-lucide-folder-plus">
       <form @submit.prevent="handleAddGroup">
         <div class="space-y-4">
           <BaseInput
@@ -609,7 +609,7 @@ async function shareAsText() {
     </BaseModal>
 
     <!-- Edit Group Modal -->
-    <BaseModal v-model="showEditGroupModal" title="Edit Group">
+    <BaseModal v-model="showEditGroupModal" title="Edit Group" icon="i-lucide-folder-edit">
       <form @submit.prevent="handleEditGroup">
         <div class="space-y-4">
           <BaseInput
@@ -631,7 +631,7 @@ async function shareAsText() {
     </BaseModal>
 
     <!-- Add Person Modal -->
-    <BaseModal v-model="showAddPersonModal" title="Add Person">
+    <BaseModal v-model="showAddPersonModal" title="Add Person" icon="i-lucide-user-plus">
       <form @submit.prevent="handleAddPerson">
         <BaseInput
           v-model="newPersonName"
@@ -651,7 +651,7 @@ async function shareAsText() {
     </BaseModal>
 
     <!-- Edit Person Modal -->
-    <BaseModal v-model="showEditPersonModal" title="Edit Person">
+    <BaseModal v-model="showEditPersonModal" title="Edit Person" icon="i-lucide-user-pen">
       <form @submit.prevent="handleEditPerson">
         <BaseInput
           v-model="editPersonName"
@@ -670,7 +670,7 @@ async function shareAsText() {
     </BaseModal>
 
     <!-- Move Person Modal -->
-    <BaseModal v-model="showMovePersonModal" title="Move Person">
+    <BaseModal v-model="showMovePersonModal" title="Move Person" icon="i-lucide-move">
       <div class="space-y-2">
         <p class="mb-4 text-sm text-gray-600 dark:text-gray-400">Select target group:</p>
         <BaseButton

@@ -198,6 +198,7 @@
     <BaseModal
       v-model="showAddProductModal"
       :title="editingProductIndex !== null ? 'Edit Product' : 'Add Product'"
+      :icon="editingProductIndex !== null ? 'i-lucide-pencil' : 'i-lucide-package-plus'"
     >
       <form @submit.prevent="handleAddProduct">
         <div class="space-y-4">

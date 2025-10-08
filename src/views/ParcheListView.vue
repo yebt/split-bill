@@ -247,7 +247,7 @@ function handleImportFile(event: Event) {
     </main>
 
     <!-- Create Parche Modal -->
-    <BaseModal v-model="showCreateModal" title="Create New Parche">
+    <BaseModal v-model="showCreateModal" title="Create New Parche" icon="i-lucide-plus-circle">
       <form @submit.prevent="handleCreate">
         <BaseInput
           v-model="newParcheName"
@@ -267,7 +267,7 @@ function handleImportFile(event: Event) {
     </BaseModal>
 
     <!-- Options Menu Modal -->
-    <BaseModal v-model="showOptionsModal" title="Parche Options">
+    <BaseModal v-model="showOptionsModal" title="Parche Options" icon="i-lucide-settings">
       <div class="space-y-2">
         <BaseButton variant="ghost" full-width @click="handleDuplicate">
           <div class="i-lucide-copy text-lg" />
@@ -281,7 +281,7 @@ function handleImportFile(event: Event) {
     </BaseModal>
 
     <!-- Duplicate Modal -->
-    <BaseModal v-model="showDuplicateModal" title="Duplicate Parche">
+    <BaseModal v-model="showDuplicateModal" title="Duplicate Parche" icon="i-lucide-copy">
       <form @submit.prevent="handleDuplicateSubmit">
         <BaseInput
           v-model="duplicateName"
