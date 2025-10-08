@@ -88,17 +88,26 @@ onUnmounted(() => {
   document.removeEventListener('keydown', handleEscapeKey)
 })
 
-// Also handle escape key when modal opens/closes
+// Handle escape key and body scroll when modal opens/closes
 watch(
   () => props.modelValue,
   (isOpen) => {
     if (isOpen) {
       document.addEventListener('keydown', handleEscapeKey)
+      // Disable body scroll
+      document.body.style.overflow = 'hidden'
     } else {
       document.removeEventListener('keydown', handleEscapeKey)
+      // Re-enable body scroll
+      document.body.style.overflow = ''
     }
   },
 )
+
+// Cleanup on unmount
+onUnmounted(() => {
+  document.body.style.overflow = ''
+})
 </script>
 
 <style scoped>

@@ -1,22 +1,5 @@
 <template>
   <div v-if="parche" class="min-h-dvh">
-    <!-- Header -->
-    <header
-      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
-    >
-      <div class="mx-auto max-w-7xl px-4 py-4">
-        <div class="flex items-center gap-3">
-          <button
-            class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-            @click="router.back()"
-          >
-            <div class="i-lucide-arrow-left text-2xl" />
-          </button>
-          <h1 class="flex-1 text-2xl font-bold">New Bill</h1>
-        </div>
-      </div>
-    </header>
-
     <!-- Main Content -->
     <main class="mx-auto max-w-3xl px-4 py-6">
       <div class="space-y-6">
@@ -233,11 +216,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, inject, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useParcheStore } from '@/stores/parcheStore'
 import { useBillStore } from '@/stores/billStore'
 import type { BillType } from '@/types/domain'
+import type { NavbarConfig } from '@/components/AppMain.vue'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
@@ -249,6 +233,9 @@ const router = useRouter()
 const route = useRoute()
 const parcheStore = useParcheStore()
 const billStore = useBillStore()
+
+// Configure navbar
+const navbarConfig = inject<Ref<NavbarConfig>>('navbarConfig')
 
 const billType = ref<BillType>('equal')
 const products = ref<
@@ -277,6 +264,15 @@ const participatingPeople = computed(() => {
 onMounted(() => {
   const id = route.params.id as string
   parcheStore.setCurrentParche(id)
+
+  // Configure navbar
+  if (navbarConfig) {
+    navbarConfig.value = {
+      title: 'New Bill',
+      showBackButton: true,
+      onBack: () => router.back(),
+    }
+  }
 })
 
 function toggleExoneration(personId: string) {

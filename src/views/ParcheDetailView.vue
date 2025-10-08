@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, inject, onMounted, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useParcheStore } from '@/stores/parcheStore'
 import { useBillStore } from '@/stores/billStore'
-import { useThemeStore } from '@/stores/themeStore'
 import { getRandomUnusedColor, type Group } from '@/types/domain'
+import type { NavbarConfig } from '@/components/AppMain.vue'
 import { capitalizeWords } from '@/utils/text'
 import { formatCurrency } from '@/utils/currency'
 import BaseButton from '@/components/BaseButton.vue'
@@ -19,7 +19,9 @@ const router = useRouter()
 const route = useRoute()
 const parcheStore = useParcheStore()
 const billStore = useBillStore()
-const themeStore = useThemeStore()
+
+// Configure navbar
+const navbarConfig = inject<Ref<NavbarConfig>>('navbarConfig')
 
 const activeTab = ref<'people' | 'bills' | 'summary'>('people')
 
@@ -78,6 +80,17 @@ if (parche.value) {
     groupExpandedState.value[group.id] = true
   })
 }
+
+// Configure navbar on mount
+onMounted(() => {
+  if (navbarConfig && parche.value) {
+    navbarConfig.value = {
+      title: parche.value.name,
+      showBackButton: true,
+      onBack: () => router.push('/'),
+    }
+  }
+})
 
 // onMounted(() => {
 //   // const id = route.params.id as string
@@ -310,49 +323,23 @@ async function shareAsText() {
 
 <template>
   <div v-if="parche" class="grid min-h-dvh grid-rows-[auto_1fr_auto]">
-    <!-- Header -->
-    <header
-      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
-    >
-      <div class="mx-auto max-w-7xl px-4 py-4">
-        <div class="mb-3 flex items-center gap-3">
-          <button
-            class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
-            @click="router.push('/')"
-          >
-            <div class="i-lucide-arrow-left text-2xl" />
-          </button>
-          <h1 class="flex-1 text-2xl font-bold">
-            {{ parche.name }}
-          </h1>
-          <BaseButton variant="ghost" size="sm" @click="themeStore.toggleTheme()">
-            <div
-              :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
-              class="text-lg"
-            />
-          </BaseButton>
-        </div>
-
-        <!-- Stats -->
-        <div class="flex gap-4 text-sm text-gray-600 dark:text-gray-400">
-          <div class="flex items-center gap-1">
-            <div class="i-lucide-users" />
-            <span>{{ parcheStore.currentParcheStats.totalPeople }} people</span>
-          </div>
-          <div class="flex items-center gap-1">
-            <div class="i-lucide-user-check" />
-            <span>{{ parcheStore.currentParcheStats.activePeople }} active</span>
-          </div>
-          <div class="flex items-center gap-1">
-            <div class="i-lucide-receipt" />
-            <span>{{ parche.bills.length }} bills</span>
-          </div>
-        </div>
-      </div>
-    </header>
-
     <!-- Main Content -->
     <main class="mx-auto grid w-full max-w-7xl grid-rows-[auto_1fr_auto] px-4 py-6">
+      <!-- Stats -->
+      <div class="mb-6 flex gap-4 text-sm text-gray-600 dark:text-gray-400">
+        <div class="flex items-center gap-1">
+          <div class="i-lucide-users" />
+          <span>{{ parcheStore.currentParcheStats.totalPeople }} people</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <div class="i-lucide-user-check" />
+          <span>{{ parcheStore.currentParcheStats.activePeople }} active</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <div class="i-lucide-receipt" />
+          <span>{{ parche.bills.length }} bills</span>
+        </div>
+      </div>
       <!-- Tabs -->
       <div class="mb-6 flex gap-2 border-b border-gray-200 dark:border-gray-700">
         <button

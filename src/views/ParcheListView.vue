@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, inject, onMounted, type Ref } from 'vue'
 import { useParcheStore } from '@/stores/parcheStore'
 import type { Parche } from '@/types/domain'
+import type { NavbarConfig } from '@/components/AppMain.vue'
 import { capitalizeWords } from '@/utils/text'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
@@ -11,6 +12,18 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
 const parcheStore = useParcheStore()
 const parchesList = computed<Parche[]>(() => parcheStore.parches)
+
+// Configure navbar
+const navbarConfig = inject<Ref<NavbarConfig>>('navbarConfig')
+onMounted(() => {
+  if (navbarConfig) {
+    navbarConfig.value = {
+      title: 'Split Bill',
+      showBackButton: false,
+      onBack: undefined,
+    }
+  }
+})
 
 const showCreateModal = ref(false)
 const newParcheName = ref('')
@@ -111,26 +124,6 @@ function handleDelete() {
 
 <template>
   <div class="min-h-dvh">
-    <!-- Header -->
-    <header
-      class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"
-    >
-      <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4">
-        <div class="flex items-center gap-3">
-          <!-- <div class="i-lucide-receipt text-3xl text-blue-600 dark:text-blue-400" /> -->
-          <div>
-            <img src="@/assets/logo.svg" alt="Logo" class="h-10 w-10" />
-          </div>
-          <h1 class="text-2xl font-bold">Split Bill</h1>
-        </div>
-        <div class="flex items-center gap-2">
-          <BaseButton variant="ghost" size="sm" @click="$router.push({ name: 'settings' })">
-            <div class="i-lucide-settings text-lg" />
-          </BaseButton>
-        </div>
-      </div>
-    </header>
-
     <!-- Main Content -->
     <main class="mx-auto max-w-7xl px-4 py-6">
       <!-- Empty State -->
