@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useParcheStore } from '@/stores/parcheStore'
-import { useThemeStore } from '@/stores/themeStore'
 import type { Parche } from '@/types/domain'
 import { capitalizeWords } from '@/utils/text'
 import BaseButton from '@/components/BaseButton.vue'
@@ -12,8 +11,6 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
 const parcheStore = useParcheStore()
 const parchesList = computed<Parche[]>(() => parcheStore.parches)
-
-const themeStore = useThemeStore()
 
 const showCreateModal = ref(false)
 const newParcheName = ref('')
@@ -27,8 +24,6 @@ const duplicateName = ref('')
 const duplicateError = ref('')
 
 const showDeleteConfirm = ref(false)
-
-const importInput = ref<HTMLInputElement>()
 
 function getParcheStats(parche: Parche) {
   const allPeople = parche.groups.flatMap((g) => g.people)
@@ -112,42 +107,6 @@ function handleDelete() {
     selectedParcheId.value = null
   }
 }
-
-function handleExport() {
-  const data = parcheStore.exportData()
-  const blob = new Blob([data], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `split-bill-export-${new Date().toISOString().split('T')[0]}.json`
-  a.click()
-  URL.revokeObjectURL(url)
-}
-
-function handleImport() {
-  importInput.value?.click()
-}
-
-function handleImportFile(event: Event) {
-  const target = event.target as HTMLInputElement
-  const file = target.files?.[0]
-  if (!file) return
-
-  const reader = new FileReader()
-  reader.onload = (e) => {
-    try {
-      const data = e.target?.result as string
-      parcheStore.importData(data)
-      alert('Data imported successfully!')
-    } catch (error) {
-      alert('Failed to import data: ' + (error instanceof Error ? error.message : 'Unknown error'))
-    }
-  }
-  reader.readAsText(file)
-
-  // Reset input
-  target.value = ''
-}
 </script>
 
 <template>
@@ -165,17 +124,8 @@ function handleImportFile(event: Event) {
           <h1 class="text-2xl font-bold">Split Bill</h1>
         </div>
         <div class="flex items-center gap-2">
-          <BaseButton variant="ghost" size="sm" @click="handleImport">
-            <div class="i-lucide-upload text-lg" />
-          </BaseButton>
-          <BaseButton variant="ghost" size="sm" @click="handleExport">
-            <div class="i-lucide-download text-lg" />
-          </BaseButton>
-          <BaseButton variant="ghost" size="sm" @click="themeStore.toggleTheme()">
-            <div
-              :class="themeStore.theme === 'dark' ? 'i-lucide-sun' : 'i-lucide-moon'"
-              class="text-lg"
-            />
+          <BaseButton variant="ghost" size="sm" @click="$router.push({ name: 'settings' })">
+            <div class="i-lucide-settings text-lg" />
           </BaseButton>
         </div>
       </div>
@@ -308,15 +258,6 @@ function handleImportFile(event: Event) {
       confirm-text="Delete"
       confirm-variant="danger"
       @confirm="handleDelete"
-    />
-
-    <!-- Import Input -->
-    <input
-      ref="importInput"
-      type="file"
-      accept="application/json"
-      class="hidden"
-      @change="handleImportFile"
     />
   </div>
 </template>

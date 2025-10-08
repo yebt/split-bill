@@ -10,6 +10,11 @@ const router = createRouter({
       component: () => import('../views/ParcheListView.vue'),
     },
     {
+      path: '/settings',
+      name: 'settings',
+      component: () => import('../views/SettingsView.vue'),
+    },
+    {
       path: '/parche/:id',
       name: 'parche-detail',
       component: () => import('../views/ParcheDetailView.vue'),
