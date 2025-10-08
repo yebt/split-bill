@@ -101,7 +101,7 @@ function goBack() {
 </script>
 
 <template>
-  <div class="min-h-dvh">
+  <div class="min-h-lvh">
     <!-- Header -->
     <header
       class="sticky top-0 z-10 border-b border-gray-200 bg-white dark:border-gray-700 dark:bg-gray-800"

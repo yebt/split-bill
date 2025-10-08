@@ -1,5 +1,5 @@
 <template>
-  <div v-if="parche" class="min-h-dvh">
+  <div v-if="parche" class="min-h-full">
     <!-- Main Content -->
     <main class="mx-auto max-w-3xl px-4 py-6">
       <div class="space-y-6">
