@@ -322,9 +322,9 @@ async function shareAsText() {
 </script>
 
 <template>
-  <div v-if="parche" class="grid min-h-dvh grid-rows-[auto_1fr_auto]">
+  <div v-if="parche" class="">
     <!-- Main Content -->
-    <main class="mx-auto grid w-full max-w-7xl grid-rows-[auto_1fr_auto] px-4 py-6">
+    <main class="mx-auto grid min-h-full w-full max-w-7xl grid-rows-[auto_auto_1fr] px-4 py-6">
       <!-- Stats -->
       <div class="mb-6 flex gap-4 text-sm text-gray-600 dark:text-gray-400">
         <div class="flex items-center gap-1">

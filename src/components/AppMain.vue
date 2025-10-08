@@ -27,7 +27,9 @@ function openSettings() {
 </script>
 
 <template>
-  <div class="min-h-dvh bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100">
+  <div
+    class="grid min-h-dvh grid-rows-[auto_1fr_auto] bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100"
+  >
     <!-- Navbar -->
     <AppNavbar
       :title="navbarConfig.title"
