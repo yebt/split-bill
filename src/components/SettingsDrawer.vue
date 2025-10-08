@@ -130,18 +130,14 @@ function handleResetSettings() {
 <template>
   <!-- Backdrop -->
   <Transition name="fade">
-    <div
-      v-if="isOpen"
-      class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm"
-      @click="close"
-    />
+    <div v-if="isOpen" class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm" @click="close" />
   </Transition>
 
   <!-- Drawer -->
   <Transition name="slide">
     <div
       v-if="isOpen"
-      class="fixed right-0 top-0 z-50 h-full w-full overflow-y-auto bg-gray-50 shadow-2xl dark:bg-gray-900 sm:w-96"
+      class="fixed right-0 top-0 z-50 h-full w-full overflow-y-auto bg-gray-50 shadow-2xl sm:w-96 dark:bg-gray-900"
     >
       <!-- Header -->
       <div
@@ -300,8 +296,8 @@ function handleResetSettings() {
   <BaseModal v-model="showTokenModal" title="Token Gemini API" icon="i-lucide-key">
     <div class="space-y-4">
       <p class="text-sm text-gray-600 dark:text-gray-400">
-        Ingresa tu token de Gemini API para habilitar el escaneo OCR de facturas. Puedes obtener
-        un token desde
+        Ingresa tu token de Gemini API para habilitar el escaneo OCR de facturas. Puedes obtener un
+        token desde
         <a
           href="https://makersuite.google.com/app/apikey"
           target="_blank"

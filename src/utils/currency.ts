@@ -10,10 +10,10 @@ export function formatCurrency(amount: number, currency?: string): string {
   // Get currency from settings store if not provided
   const settingsStore = useSettingsStore()
   const currencyCode = currency || settingsStore.currency
-  
+
   // Check if the amount has non-zero decimal places
   const hasDecimals = amount % 1 !== 0
-  
+
   // Format with appropriate decimal places
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -21,7 +21,7 @@ export function formatCurrency(amount: number, currency?: string): string {
     minimumFractionDigits: hasDecimals ? 2 : 0,
     maximumFractionDigits: hasDecimals ? 2 : 0,
   })
-  
+
   return formatter.format(amount)
 }
 
@@ -32,11 +32,11 @@ export function formatCurrency(amount: number, currency?: string): string {
  */
 export function formatAmount(amount: number): string {
   const hasDecimals = amount % 1 !== 0
-  
+
   const formatter = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: hasDecimals ? 2 : 0,
     maximumFractionDigits: hasDecimals ? 2 : 0,
   })
-  
+
   return formatter.format(amount)
 }

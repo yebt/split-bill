@@ -15,7 +15,9 @@
           <div
             class="flex items-center justify-between border-b border-gray-200 p-4 dark:border-gray-700"
           >
-            <h2 class="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-gray-100">
+            <h2
+              class="flex items-center gap-2 text-xl font-semibold text-gray-900 dark:text-gray-100"
+            >
               <div v-if="icon" :class="icon" class="text-2xl" />
               {{ title }}
             </h2>
