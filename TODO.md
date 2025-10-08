@@ -1,12 +1,12 @@
-- ~~manage 404~~
-- ~~auto capitalize names of persons~~
-- ~~auto capitalize names of groups~~
-- ~~add some view transitions.~~
-- ~~the binding in bills is interpolated~~
-- ~~responsive buttons in parche~~
-- Put icons in the modal of creation to fastly understand what i edit or create
-- Decrease the view transition time
-- Add group transitions when add and remove elements (resalt briefly the new entity)
-- ~~add masks to number inputs~~
-- ~~apply money mask to the amounts showed, ignore te decimals if the amount is 0~~
-- ~~Add splash screen for when is loading the application~~
+- [x] ~~manage 404~~
+- [x] ~~auto capitalize names of persons~~
+- [x] ~~auto capitalize names of groups~~
+- [x] ~~add some view transitions.~~
+- [x] ~~the binding in bills is interpolated~~
+- [x] ~~responsive buttons in parche~~
+- [x] Put icons in the modal of creation to fastly understand what i edit or create
+- [-] Decrease the view transition time
+- [x] Add group transitions when add and remove elements (resalt briefly the new entity)
+- [x] ~~add masks to number inputs~~
+- [x] ~~apply money mask to the amounts showed, ignore te decimals if the amount is 0~~
+- [x] ~~Add splash screen for when is loading the application~~
