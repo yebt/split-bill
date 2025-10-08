@@ -54,7 +54,7 @@ const router = createRouter({
   ],
 })
 
-router.beforeEach((to, from) => {
+router.beforeEach((to, _) => {
   if (to.name === 'not-found') {
     return { name: 'home' }
   }
