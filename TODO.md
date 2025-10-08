@@ -10,3 +10,4 @@
 - [x] ~~add masks to number inputs~~
 - [x] ~~apply money mask to the amounts showed, ignore te decimals if the amount is 0~~
 - [x] ~~Add splash screen for when is loading the application~~
+- [x] Add settings page with import/export, dark mode, currency, and Gemini API token configuration
