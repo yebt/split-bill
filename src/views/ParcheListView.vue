@@ -158,7 +158,7 @@ function handleDelete() {
                 </h3>
                 <button
                   class="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
-                  @click.stop="openOptionsMenu(parche.id)"
+                  @click.stop.prevent="openOptionsMenu(parche.id)"
                 >
                   <div class="i-lucide-more-vertical text-xl" />
                 </button>
