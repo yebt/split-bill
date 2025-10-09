@@ -1,7 +1,7 @@
 import { useHead } from '@unhead/vue'
 
 // Configure SEO and social media meta tags
-const siteTitle = 'Split Bill'
+const siteTitle = 'Squad Bill'
 const siteDescription =
   'Easily split bills and manage expenses with your friends. Track who owes what and settle up with your squad.'
 const siteUrl = import.meta.env.VITE_SITE_URL || '.'
@@ -20,9 +20,9 @@ export const useHeadTags = () => {
       { name: 'description', content: siteDescription },
       {
         name: 'keywords',
-        content: 'split bill, expense tracker, bill splitting, group expenses, squad',
+        content: 'squad bill, expense tracker, bill splitting, group expenses, squad',
       },
-      { name: 'author', content: 'Split Bill' },
+      { name: 'author', content: 'Squad Bill' },
       // { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },
       { name: 'theme-color', content: '#2563eb' },
 
@@ -34,7 +34,7 @@ export const useHeadTags = () => {
       { property: 'og:image', content: ogImage },
       { property: 'og:image:width', content: '1200' },
       { property: 'og:image:height', content: '630' },
-      { property: 'og:image:alt', content: 'Split Bill - Expense Tracker' },
+      { property: 'og:image:alt', content: 'Squad Bill - Expense Tracker' },
       { property: 'og:site_name', content: siteTitle },
       { property: 'og:locale', content: 'en_US' },
 
@@ -44,7 +44,7 @@ export const useHeadTags = () => {
       { name: 'twitter:title', content: siteTitle },
       { name: 'twitter:description', content: siteDescription },
       { name: 'twitter:image', content: ogImage },
-      { name: 'twitter:image:alt', content: 'Split Bill - Expense Tracker' },
+      { name: 'twitter:image:alt', content: 'Squad Bill - Expense Tracker' },
     ],
     link: [
       { rel: 'canonical', href: siteUrl },

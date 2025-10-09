@@ -1,4 +1,4 @@
-# Split Bill - Usage Guide
+# Squad Bill - Usage Guide
 
 ## Getting Started
 

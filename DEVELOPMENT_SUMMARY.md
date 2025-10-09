@@ -1,8 +1,8 @@
-# Split Bill - Development Summary
+# Squad Bill - Development Summary
 
 ## Project Status: ✅ COMPLETE
 
-The Split Bill application has been successfully built and is running at **http://localhost:5173**
+The Squad Bill application has been successfully built and is running at **http://localhost:5173**
 
 ## What Was Built
 
@@ -301,7 +301,7 @@ bun run test:unit    # Run unit tests (when added)
 
 ## Conclusion
 
-The Split Bill application is **fully functional** and ready for use. All features from the AGENT.md specification have been implemented:
+The Squad Bill application is **fully functional** and ready for use. All features from the AGENT.md specification have been implemented:
 
 - ✅ Squad, Groups, and People Management (F1)
 - ✅ Bills Management (F2)

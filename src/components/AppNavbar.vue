@@ -34,7 +34,7 @@ function handleOpenSettings() {
               <img src="@/assets/logo.svg" alt="Logo" class="h-10 w-10" />
             </div>
           </template>
-          <h1 class="text-2xl font-bold">{{ title || 'Split Bill' }}</h1>
+          <h1 class="text-2xl font-bold">{{ title || 'Squad Bill' }}</h1>
         </slot>
       </div>
 

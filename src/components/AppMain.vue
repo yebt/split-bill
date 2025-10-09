@@ -14,7 +14,7 @@ const showSettings = ref(false)
 
 // Provide navbar configuration
 const navbarConfig: Ref<NavbarConfig> = ref({
-  title: 'Split Bill',
+  title: 'Squad Bill',
   showBackButton: false,
   onBack: undefined,
 })

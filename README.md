@@ -1,4 +1,4 @@
-# Split Bill 💰
+# Squad Bill 💰
 
 A mobile-first progressive web application for splitting bills among friends in social gatherings. Built with Vue 3, TypeScript, and UnoCSS.
 

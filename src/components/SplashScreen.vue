@@ -16,7 +16,7 @@
         fill="#9C6CFE"
       />
     </svg>
-    <div class="splash-title">Split Bill</div>
+    <div class="splash-title">Squad Bill</div>
   </div>
 </template>
 

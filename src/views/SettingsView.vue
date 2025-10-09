@@ -58,7 +58,7 @@ function handleExport() {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = `split-bill-export-${new Date().toISOString().split('T')[0]}.json`
+  a.download = `squad-bill-export-${new Date().toISOString().split('T')[0]}.json`
   a.click()
   URL.revokeObjectURL(url)
 }
@@ -263,7 +263,7 @@ function goBack() {
 
         <!-- App Info -->
         <div class="text-center text-sm text-gray-500 dark:text-gray-400">
-          <p>Split Bill v1.0.0</p>
+          <p>Squad Bill v1.0.0</p>
           <p class="mt-1">Made with ❤️ for easier bill splitting</p>
         </div>
       </div>

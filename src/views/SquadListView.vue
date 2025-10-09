@@ -18,7 +18,7 @@ const navbarConfig = inject<Ref<NavbarConfig>>('navbarConfig')
 onMounted(() => {
   if (navbarConfig) {
     navbarConfig.value = {
-      title: 'Split Bill',
+      title: 'Squad Bill',
       showBackButton: false,
       onBack: undefined,
     }
