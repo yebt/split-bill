@@ -1,5 +1,5 @@
 <template>
-  <div v-if="parche" class="min-h-full">
+  <div v-if="squad" class="min-h-full">
     <!-- Main Content -->
     <main class="mx-auto max-w-3xl px-4 py-6">
       <div class="space-y-6">
@@ -97,7 +97,7 @@
                 <div class="mb-1 text-xs text-gray-500 dark:text-gray-400">Assigned to:</div>
                 <div class="flex flex-wrap gap-1">
                   <button
-                    v-for="person in parcheStore.currentParcheActivePeople"
+                    v-for="person in squadStore.currentSquadActivePeople"
                     :key="person.id"
                     :class="[
                       'rounded px-2 py-1 text-xs transition-colors',
@@ -131,7 +131,7 @@
 
           <div class="flex flex-wrap gap-2">
             <button
-              v-for="person in parcheStore.currentParcheActivePeople"
+              v-for="person in squadStore.currentSquadActivePeople"
               :key="person.id"
               :class="[
                 'rounded-lg px-3 py-2 transition-colors',
@@ -218,7 +218,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, inject, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useParcheStore } from '@/stores/parcheStore'
+import { useSquadStore } from '@/stores/squadStore'
 import { useBillStore } from '@/stores/billStore'
 import type { BillType } from '@/types/domain'
 import type { NavbarConfig } from '@/components/AppMain.vue'
@@ -231,7 +231,7 @@ import { formatCurrency } from '@/utils/currency'
 
 const router = useRouter()
 const route = useRoute()
-const parcheStore = useParcheStore()
+const squadStore = useSquadStore()
 const billStore = useBillStore()
 
 // Configure navbar
@@ -251,19 +251,19 @@ const productForm = ref({
   price: 0,
 })
 
-const parche = computed(() => parcheStore.currentParche)
+const squad = computed(() => squadStore.currentSquad)
 
 const total = computed(() => {
   return products.value.reduce((sum, p) => sum + p.quantity * p.price, 0)
 })
 
 const participatingPeople = computed(() => {
-  return parcheStore.currentParcheActivePeople.filter((p) => !exoneratedPeople.value.includes(p.id))
+  return squadStore.currentSquadActivePeople.filter((p) => !exoneratedPeople.value.includes(p.id))
 })
 
 onMounted(() => {
   const id = route.params.id as string
-  parcheStore.setCurrentParche(id)
+  squadStore.setCurrentSquad(id)
 
   // Configure navbar
   if (navbarConfig) {
@@ -366,10 +366,10 @@ function calculatePersonAmount(personId: string): number {
 }
 
 function handleCreateBill() {
-  if (!parche.value || products.value.length === 0) return
+  if (!squad.value || products.value.length === 0) return
 
   try {
-    const bill = billStore.createBill(parche.value.id, billType.value)
+    const bill = billStore.createBill(squad.value.id, billType.value)
 
     // Add products
     for (const product of products.value) {
@@ -393,7 +393,7 @@ function handleCreateBill() {
       billStore.exoneratePerson(bill.id, personId)
     }
 
-    router.push({ name: 'bill-detail', params: { parcheId: parche.value.id, billId: bill.id } })
+    router.push({ name: 'bill-detail', params: { squadId: squad.value.id, billId: bill.id } })
   } catch (error) {
     alert('Failed to create bill: ' + (error instanceof Error ? error.message : 'Unknown error'))
   }

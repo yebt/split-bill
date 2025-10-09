@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import { parcheRepository } from '@/repositories/parcheRepository'
+import { squadRepository } from '@/repositories/squadRepository'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -7,40 +7,40 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: () => import('../views/ParcheListView.vue'),
+      component: () => import('../views/SquadListView.vue'),
     },
     {
-      path: '/parche/:id',
-      name: 'parche-detail',
-      component: () => import('../views/ParcheDetailView.vue'),
+      path: '/squad/:id',
+      name: 'squad-detail',
+      component: () => import('../views/SquadDetailView.vue'),
       beforeEnter: (to) => {
-        const parche = parcheRepository.findById(to.params.id as string)
-        if (!parche) {
+        const squad = squadRepository.findById(to.params.id as string)
+        if (!squad) {
           return { name: 'not-found' }
         }
       },
     },
     {
-      path: '/parche/:id/bill/new',
+      path: '/squad/:id/bill/new',
       name: 'bill-create',
       component: () => import('../views/BillCreateView.vue'),
       beforeEnter: (to) => {
-        const parche = parcheRepository.findById(to.params.id as string)
-        if (!parche) {
+        const squad = squadRepository.findById(to.params.id as string)
+        if (!squad) {
           return { name: 'not-found' }
         }
       },
     },
     {
-      path: '/parche/:parcheId/bill/:billId',
+      path: '/squad/:squadId/bill/:billId',
       name: 'bill-detail',
       component: () => import('../views/BillDetailView.vue'),
       beforeEnter: (to) => {
-        const parche = parcheRepository.findById(to.params.parcheId as string)
-        if (!parche) {
+        const squad = squadRepository.findById(to.params.squadId as string)
+        if (!squad) {
           return { name: 'not-found' }
         }
-        const bill = parche.bills.find((b) => b.id === to.params.billId)
+        const bill = squad.bills.find((b) => b.id === to.params.billId)
         if (!bill) {
           return { name: 'not-found' }
         }

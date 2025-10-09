@@ -3,7 +3,7 @@ import { useHead } from '@unhead/vue'
 // Configure SEO and social media meta tags
 const siteTitle = 'Split Bill'
 const siteDescription =
-  'Easily split bills and manage expenses with your friends. Track who owes what and settle up with your parche.'
+  'Easily split bills and manage expenses with your friends. Track who owes what and settle up with your squad.'
 const siteUrl = import.meta.env.VITE_SITE_URL || '.'
 const ogImage = `${siteUrl}/preivew/og-image.jpg`
 
@@ -20,7 +20,7 @@ export const useHeadTags = () => {
       { name: 'description', content: siteDescription },
       {
         name: 'keywords',
-        content: 'split bill, expense tracker, bill splitting, group expenses, parche',
+        content: 'split bill, expense tracker, bill splitting, group expenses, squad',
       },
       { name: 'author', content: 'Split Bill' },
       // { name: 'viewport', content: 'width=device-width, initial-scale=1.0' },

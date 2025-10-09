@@ -1,5 +1,5 @@
 <template>
-  <div v-if="bill && parche" class="min-h-full">
+  <div v-if="bill && squad" class="min-h-full">
     <!-- Main Content -->
     <main class="mx-auto max-w-3xl px-4 py-6">
       <div class="space-y-6">
@@ -136,7 +136,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, inject, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useParcheStore } from '@/stores/parcheStore'
+import { useSquadStore } from '@/stores/squadStore'
 import { useBillStore } from '@/stores/billStore'
 import type { NavbarConfig } from '@/components/AppMain.vue'
 import BaseButton from '@/components/BaseButton.vue'
@@ -146,7 +146,7 @@ import { formatCurrency } from '@/utils/currency'
 
 const router = useRouter()
 const route = useRoute()
-const parcheStore = useParcheStore()
+const squadStore = useSquadStore()
 const billStore = useBillStore()
 
 // Configure navbar
@@ -154,13 +154,13 @@ const navbarConfig = inject<Ref<NavbarConfig>>('navbarConfig')
 
 const showDeleteConfirm = ref(false)
 
-const parche = computed(() => parcheStore.currentParche)
+const squad = computed(() => squadStore.currentSquad)
 const bill = computed(() => billStore.currentBill)
 
 onMounted(() => {
-  const parcheId = route.params.parcheId as string
+  const squadId = route.params.squadId as string
   const billId = route.params.billId as string
-  parcheStore.setCurrentParche(parcheId)
+  squadStore.setCurrentSquad(squadId)
   billStore.setCurrentBill(billId)
 
   // Configure navbar
@@ -186,19 +186,19 @@ function formatDate(dateString: string) {
 }
 
 function getPersonName(personId: string): string {
-  const person = parcheStore.currentParcheAllPeople.find((p) => p.id === personId)
+  const person = squadStore.currentSquadAllPeople.find((p) => p.id === personId)
   return person?.name || 'Unknown'
 }
 
 function getPersonActive(personId: string): boolean {
-  const person = parcheStore.currentParcheAllPeople.find((p) => p.id === personId)
+  const person = squadStore.currentSquadAllPeople.find((p) => p.id === personId)
   return person?.active || false
 }
 
 async function shareAsText() {
-  if (!bill.value || !parche.value) return
+  if (!bill.value || !squad.value) return
 
-  let text = `🧾 Bill from ${parche.value.name}\n`
+  let text = `🧾 Bill from ${squad.value.name}\n`
   text += `📅 ${formatDate(bill.value.createdAt)}\n\n`
 
   text += `📦 Products:\n`
@@ -230,8 +230,8 @@ async function shareAsText() {
 }
 
 function handleDelete() {
-  if (!bill.value || !parche.value) return
+  if (!bill.value || !squad.value) return
   billStore.deleteBill(bill.value.id)
-  router.push({ name: 'parche-detail', params: { id: parche.value.id } })
+  router.push({ name: 'squad-detail', params: { id: squad.value.id } })
 }
 </script>

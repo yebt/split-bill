@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useThemeStore } from '@/stores/themeStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useParcheStore } from '@/stores/parcheStore'
+import { useSquadStore } from '@/stores/squadStore'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseCard from '@/components/BaseCard.vue'
 import BaseModal from '@/components/BaseModal.vue'
@@ -13,7 +13,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
 const router = useRouter()
 const themeStore = useThemeStore()
 const settingsStore = useSettingsStore()
-const parcheStore = useParcheStore()
+const squadStore = useSquadStore()
 
 // Currency settings
 const currencies = [
@@ -53,7 +53,7 @@ function handleSaveToken() {
 }
 
 function handleExport() {
-  const data = parcheStore.exportData()
+  const data = squadStore.exportData()
   const blob = new Blob([data], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -76,7 +76,7 @@ function handleImportFile(event: Event) {
   reader.onload = (e) => {
     try {
       const data = e.target?.result as string
-      parcheStore.importData(data)
+      squadStore.importData(data)
       alert('Data imported successfully!')
     } catch (error) {
       alert('Failed to import data: ' + (error instanceof Error ? error.message : 'Unknown error'))
@@ -215,7 +215,7 @@ function goBack() {
               <div>
                 <p class="font-medium text-gray-900 dark:text-gray-100">Export Data</p>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                  Download all your parches and bills as JSON
+                  Download all your squads and bills as JSON
                 </p>
               </div>
               <BaseButton variant="secondary" @click="handleExport">
@@ -228,7 +228,7 @@ function goBack() {
               <div>
                 <p class="font-medium text-gray-900 dark:text-gray-100">Import Data</p>
                 <p class="text-sm text-gray-500 dark:text-gray-400">
-                  Load parches and bills from a JSON file
+                  Load squads and bills from a JSON file
                 </p>
               </div>
               <BaseButton variant="secondary" @click="handleImport">
@@ -320,7 +320,7 @@ function goBack() {
     <ConfirmDialog
       v-model="showResetConfirm"
       title="Reset Settings"
-      message="Are you sure you want to reset all settings to default values? This will not delete your parches or bills."
+      message="Are you sure you want to reset all settings to default values? This will not delete your squads or bills."
       confirm-text="Reset"
       confirm-variant="danger"
       @confirm="handleResetSettings"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, inject, onMounted, type Ref } from 'vue'
-import { useParcheStore } from '@/stores/parcheStore'
-import type { Parche } from '@/types/domain'
+import { useSquadStore } from '@/stores/squadStore'
+import type { Squad } from '@/types/domain'
 import type { NavbarConfig } from '@/components/AppMain.vue'
 import { capitalizeWords } from '@/utils/text'
 import BaseButton from '@/components/BaseButton.vue'
@@ -10,8 +10,8 @@ import BaseModal from '@/components/BaseModal.vue'
 import BaseInput from '@/components/BaseInput.vue'
 import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
-const parcheStore = useParcheStore()
-const parchesList = computed<Parche[]>(() => parcheStore.parches)
+const squadStore = useSquadStore()
+const squadsList = computed<Squad[]>(() => squadStore.squads)
 
 // Configure navbar
 const navbarConfig = inject<Ref<NavbarConfig>>('navbarConfig')
@@ -26,11 +26,11 @@ onMounted(() => {
 })
 
 const showCreateModal = ref(false)
-const newParcheName = ref('')
+const newSquadName = ref('')
 const createError = ref('')
 
 const showOptionsModal = ref(false)
-const selectedParcheId = ref<string | null>(null)
+const selectedSquadId = ref<string | null>(null)
 
 const showDuplicateModal = ref(false)
 const duplicateName = ref('')
@@ -38,74 +38,74 @@ const duplicateError = ref('')
 
 const showDeleteConfirm = ref(false)
 
-function getParcheStats(parche: Parche) {
-  const allPeople = parche.groups.flatMap((g) => g.people)
+function getSquadStats(squad: Squad) {
+  const allPeople = squad.groups.flatMap((g) => g.people)
   return {
     totalPeople: allPeople.length,
     activePeople: allPeople.filter((p) => p.active).length,
   }
 }
 
-// function goToParche(id: string) {
-//   router.push({ name: 'parche-detail', params: { id } })
+// function goToSquad(id: string) {
+//   router.push({ name: 'squad-detail', params: { id } })
 // }
 
 function handleCreate() {
   createError.value = ''
 
-  // Validate parche name
-  const trimmedName = newParcheName.value.trim()
+  // Validate squad name
+  const trimmedName = newSquadName.value.trim()
   if (!trimmedName) {
-    createError.value = 'Parche name is required'
+    createError.value = 'Squad name is required'
     return
   }
 
-  // Capitalize parche name
+  // Capitalize squad name
   const capitalizedName = capitalizeWords(trimmedName)
 
   try {
-    parcheStore.createParche(capitalizedName)
+    squadStore.createSquad(capitalizedName)
     showCreateModal.value = false
-    newParcheName.value = ''
+    newSquadName.value = ''
   } catch (error) {
-    createError.value = error instanceof Error ? error.message : 'Failed to create parche'
+    createError.value = error instanceof Error ? error.message : 'Failed to create squad'
   }
 }
 
 function openOptionsMenu(id: string) {
-  selectedParcheId.value = id
+  selectedSquadId.value = id
   showOptionsModal.value = true
 }
 
 function handleDuplicate() {
   showOptionsModal.value = false
-  const parche = parcheStore.parches.find((p) => p.id === selectedParcheId.value)
-  if (parche) {
-    duplicateName.value = `${parche.name} (Copy)`
+  const squad = squadStore.squads.find((p) => p.id === selectedSquadId.value)
+  if (squad) {
+    duplicateName.value = `${squad.name} (Copy)`
     showDuplicateModal.value = true
   }
 }
 
 function handleDuplicateSubmit() {
-  if (!selectedParcheId.value) return
+  if (!selectedSquadId.value) return
   duplicateError.value = ''
 
-  // Validate parche name
+  // Validate squad name
   const trimmedName = duplicateName.value.trim()
   if (!trimmedName) {
-    duplicateError.value = 'Parche name is required'
+    duplicateError.value = 'Squad name is required'
     return
   }
 
-  // Capitalize parche name
+  // Capitalize squad name
   const capitalizedName = capitalizeWords(trimmedName)
 
   try {
-    parcheStore.duplicateParche(selectedParcheId.value, capitalizedName)
+    squadStore.duplicateSquad(selectedSquadId.value, capitalizedName)
     showDuplicateModal.value = false
     duplicateName.value = ''
   } catch (error) {
-    duplicateError.value = error instanceof Error ? error.message : 'Failed to duplicate parche'
+    duplicateError.value = error instanceof Error ? error.message : 'Failed to duplicate squad'
   }
 }
 
@@ -115,9 +115,9 @@ function confirmDelete() {
 }
 
 function handleDelete() {
-  if (selectedParcheId.value) {
-    parcheStore.deleteParche(selectedParcheId.value)
-    selectedParcheId.value = null
+  if (selectedSquadId.value) {
+    squadStore.deleteSquad(selectedSquadId.value)
+    selectedSquadId.value = null
   }
 }
 </script>
@@ -127,38 +127,38 @@ function handleDelete() {
     <!-- Main Content -->
     <main class="mx-auto max-w-7xl px-4 py-6">
       <!-- Empty State -->
-      <div v-if="parcheStore.parches.length === 0" class="py-16 text-center">
+      <div v-if="squadStore.squads.length === 0" class="py-16 text-center">
         <div class="i-lucide-users mx-auto mb-4 text-6xl text-gray-300 dark:text-gray-600" />
-        <h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-300">No parches yet</h2>
+        <h2 class="mb-2 text-2xl font-semibold text-gray-700 dark:text-gray-300">No squads yet</h2>
         <p class="mb-6 text-gray-500 dark:text-gray-400">
-          Create your first parche to start splitting bills
+          Create your first squad to start splitting bills
         </p>
         <BaseButton @click="showCreateModal = true">
           <div class="i-lucide-plus text-lg" />
-          Create Parche
+          Create Squad
         </BaseButton>
       </div>
 
-      <!-- Parche List -->
+      <!-- Squad List -->
       <div v-else>
         <div class="mb-6 flex items-center justify-between">
-          <h2 class="text-xl font-semibold">Your Parches</h2>
+          <h2 class="text-xl font-semibold">Your Squads</h2>
           <BaseButton @click="showCreateModal = true">
             <div class="i-lucide-plus text-lg" />
-            New Parche
+            New Squad
           </BaseButton>
         </div>
 
         <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-          <BaseCard v-for="parche in parchesList" :key="parche.id" clickable>
-            <RouterLink :to="{ name: 'parche-detail', params: { id: parche.id } }">
+          <BaseCard v-for="squad in squadsList" :key="squad.id" clickable>
+            <RouterLink :to="{ name: 'squad-detail', params: { id: squad.id } }">
               <div class="mb-3 flex items-start justify-between">
                 <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100">
-                  {{ parche.name }}
+                  {{ squad.name }}
                 </h3>
                 <button
                   class="text-gray-400 transition-colors hover:text-gray-600 dark:hover:text-gray-200"
-                  @click.stop.prevent="openOptionsMenu(parche.id)"
+                  @click.stop.prevent="openOptionsMenu(squad.id)"
                 >
                   <div class="i-lucide-more-vertical text-xl" />
                 </button>
@@ -168,19 +168,19 @@ function handleDelete() {
                 <div class="flex items-center gap-2">
                   <div class="i-lucide-users text-base" />
                   <span
-                    >{{ getParcheStats(parche).totalPeople }} people ({{
-                      getParcheStats(parche).activePeople
+                    >{{ getSquadStats(squad).totalPeople }} people ({{
+                      getSquadStats(squad).activePeople
                     }}
                     active)</span
                   >
                 </div>
                 <div class="flex items-center gap-2">
                   <div class="i-lucide-layers text-base" />
-                  <span>{{ parche.groups.length }} groups</span>
+                  <span>{{ squad.groups.length }} groups</span>
                 </div>
                 <div class="flex items-center gap-2">
                   <div class="i-lucide-receipt text-base" />
-                  <span>{{ parche.bills.length }} bills</span>
+                  <span>{{ squad.bills.length }} bills</span>
                 </div>
               </div>
             </RouterLink>
@@ -189,12 +189,12 @@ function handleDelete() {
       </div>
     </main>
 
-    <!-- Create Parche Modal -->
-    <BaseModal v-model="showCreateModal" title="Create New Parche" icon="i-lucide-plus-circle">
+    <!-- Create Squad Modal -->
+    <BaseModal v-model="showCreateModal" title="Create New Squad" icon="i-lucide-plus-circle">
       <form @submit.prevent="handleCreate">
         <BaseInput
-          v-model="newParcheName"
-          label="Parche Name"
+          v-model="newSquadName"
+          label="Squad Name"
           placeholder="e.g., Weekend Trip, Dinner Party"
           required
           autofocus
@@ -210,7 +210,7 @@ function handleDelete() {
     </BaseModal>
 
     <!-- Options Menu Modal -->
-    <BaseModal v-model="showOptionsModal" title="Parche Options" icon="i-lucide-settings">
+    <BaseModal v-model="showOptionsModal" title="Squad Options" icon="i-lucide-settings">
       <div class="space-y-2">
         <BaseButton variant="ghost" full-width @click="handleDuplicate">
           <div class="i-lucide-copy text-lg" />
@@ -224,12 +224,12 @@ function handleDelete() {
     </BaseModal>
 
     <!-- Duplicate Modal -->
-    <BaseModal v-model="showDuplicateModal" title="Duplicate Parche" icon="i-lucide-copy">
+    <BaseModal v-model="showDuplicateModal" title="Duplicate Squad" icon="i-lucide-copy">
       <form @submit.prevent="handleDuplicateSubmit">
         <BaseInput
           v-model="duplicateName"
-          label="New Parche Name"
-          placeholder="Enter name for duplicated parche"
+          label="New Squad Name"
+          placeholder="Enter name for duplicated squad"
           required
           autofocus
           :error="duplicateError"
@@ -246,8 +246,8 @@ function handleDelete() {
     <!-- Delete Confirmation -->
     <ConfirmDialog
       v-model="showDeleteConfirm"
-      title="Delete Parche"
-      message="Are you sure you want to delete this parche? This action cannot be undone."
+      title="Delete Squad"
+      message="Are you sure you want to delete this squad? This action cannot be undone."
       confirm-text="Delete"
       confirm-variant="danger"
       @confirm="handleDelete"

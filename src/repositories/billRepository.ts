@@ -1,32 +1,32 @@
 import { ulid } from 'ulid'
 import type { Bill, Product, BillType } from '@/types/domain'
-import { parcheRepository } from './parcheRepository'
+import { squadRepository } from './squadRepository'
 
 export class BillRepository {
-  createBill(parcheId: string, type: BillType): Bill {
-    const parche = parcheRepository.findById(parcheId)
-    if (!parche) {
-      throw new Error(`Parche with id "${parcheId}" not found`)
+  createBill(squadId: string, type: BillType): Bill {
+    const squad = squadRepository.findById(squadId)
+    if (!squad) {
+      throw new Error(`Squad with id "${squadId}" not found`)
     }
 
     const newBill: Bill = {
       id: ulid(),
-      parcheId,
+      squadId,
       type,
       products: [],
       exoneratedPeople: [],
       createdAt: new Date().toISOString(),
     }
 
-    parche.bills.push(newBill)
-    parcheRepository.update(parcheId, { bills: parche.bills })
+    squad.bills.push(newBill)
+    squadRepository.update(squadId, { bills: squad.bills })
     return newBill
   }
 
   findById(billId: string): Bill | null {
-    const parches = parcheRepository.findAll()
-    for (const parche of parches) {
-      const bill = parche.bills.find((b) => b.id === billId)
+    const squads = squadRepository.findAll()
+    for (const squad of squads) {
+      const bill = squad.bills.find((b) => b.id === billId)
       if (bill) {
         return bill
       }
@@ -34,21 +34,21 @@ export class BillRepository {
     return null
   }
 
-  findByParcheId(parcheId: string): Bill[] {
-    const parche = parcheRepository.findById(parcheId)
-    return parche?.bills || []
+  findBySquadId(squadId: string): Bill[] {
+    const squad = squadRepository.findById(squadId)
+    return squad?.bills || []
   }
 
-  updateBill(billId: string, updates: Partial<Omit<Bill, 'id' | 'parcheId' | 'createdAt'>>): Bill {
-    const parches = parcheRepository.findAll()
+  updateBill(billId: string, updates: Partial<Omit<Bill, 'id' | 'squadId' | 'createdAt'>>): Bill {
+    const squads = squadRepository.findAll()
 
-    for (const parche of parches) {
-      const billIndex = parche.bills.findIndex((b) => b.id === billId)
+    for (const squad of squads) {
+      const billIndex = squad.bills.findIndex((b) => b.id === billId)
       if (billIndex !== -1) {
-        const currentBill = parche.bills[billIndex]
+        const currentBill = squad.bills[billIndex]
         const updated = { ...currentBill, ...updates } as Bill
-        parche.bills[billIndex] = updated
-        parcheRepository.update(parche.id, { bills: parche.bills })
+        squad.bills[billIndex] = updated
+        squadRepository.update(squad.id, { bills: squad.bills })
         return updated
       }
     }
@@ -57,12 +57,12 @@ export class BillRepository {
   }
 
   deleteBill(billId: string): void {
-    const parches = parcheRepository.findAll()
+    const squads = squadRepository.findAll()
 
-    for (const parche of parches) {
-      const filtered = parche.bills.filter((b) => b.id !== billId)
-      if (filtered.length !== parche.bills.length) {
-        parcheRepository.update(parche.id, { bills: filtered })
+    for (const squad of squads) {
+      const filtered = squad.bills.filter((b) => b.id !== billId)
+      if (filtered.length !== squad.bills.length) {
+        squadRepository.update(squad.id, { bills: filtered })
         return
       }
     }
@@ -195,12 +195,12 @@ export class BillRepository {
       return new Map()
     }
 
-    const parche = parcheRepository.findById(bill.parcheId)
-    if (!parche) {
+    const squad = squadRepository.findById(bill.squadId)
+    if (!squad) {
       return new Map()
     }
 
-    const activePeople = parcheRepository.getActivePeople(bill.parcheId)
+    const activePeople = squadRepository.getActivePeople(bill.squadId)
     const participatingPeople = activePeople.filter((p) => !bill.exoneratedPeople.includes(p.id))
 
     const debts = new Map<string, number>()
@@ -247,8 +247,8 @@ export class BillRepository {
     return debts
   }
 
-  calculateParcheTotals(parcheId: string): Map<string, number> {
-    const bills = this.findByParcheId(parcheId)
+  calculateSquadTotals(squadId: string): Map<string, number> {
+    const bills = this.findBySquadId(squadId)
     const totals = new Map<string, number>()
 
     for (const bill of bills) {

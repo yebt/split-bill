@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, inject, onMounted, type Ref } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useParcheStore } from '@/stores/parcheStore'
+import { useSquadStore } from '@/stores/squadStore'
 import { useBillStore } from '@/stores/billStore'
 import { getRandomUnusedColor, type Group } from '@/types/domain'
 import type { NavbarConfig } from '@/components/AppMain.vue'
@@ -17,7 +17,7 @@ import ConfirmDialog from '@/components/ConfirmDialog.vue'
 
 const router = useRouter()
 const route = useRoute()
-const parcheStore = useParcheStore()
+const squadStore = useSquadStore()
 const billStore = useBillStore()
 
 // Configure navbar
@@ -49,43 +49,43 @@ const selectedPersonId = ref<string | null>(null)
 const personError = ref('')
 const showDeletePersonConfirm = ref(false)
 
-const parche = computed(() => parcheStore.currentParche)
+const squad = computed(() => squadStore.currentSquad)
 
 const sortedBills = computed(() => {
-  if (!parche.value) return []
-  return [...parche.value.bills].sort(
+  if (!squad.value) return []
+  return [...squad.value.bills].sort(
     (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
   )
 })
 
-const parcheTotals = computed(() => {
-  if (!parche.value) return new Map()
-  return billStore.getParcheTotals(parche.value.id)
+const squadTotals = computed(() => {
+  if (!squad.value) return new Map()
+  return billStore.getSquadTotals(squad.value.id)
 })
 
 const totalAmount = computed(() => {
   let sum = 0
-  parcheTotals.value.forEach((amount) => {
+  squadTotals.value.forEach((amount) => {
     sum += amount
   })
   return sum
 })
 
-// Initialize parche
+// Initialize squad
 const id = route.params.id as string
-parcheStore.setCurrentParche(id)
+squadStore.setCurrentSquad(id)
 // Initialize all groups as expanded
-if (parche.value) {
-  parche.value.groups.forEach((group) => {
+if (squad.value) {
+  squad.value.groups.forEach((group) => {
     groupExpandedState.value[group.id] = true
   })
 }
 
 // Configure navbar on mount
 onMounted(() => {
-  if (navbarConfig && parche.value) {
+  if (navbarConfig && squad.value) {
     navbarConfig.value = {
-      title: parche.value.name,
+      title: squad.value.name,
       showBackButton: true,
       onBack: () => router.push('/'),
     }
@@ -94,11 +94,11 @@ onMounted(() => {
 
 // onMounted(() => {
 //   // const id = route.params.id as string
-//   // parcheStore.setCurrentParche(id)
+//   // squadStore.setCurrentSquad(id)
 
 //   // Initialize all groups as expanded
-//   if (parche.value) {
-//     parche.value.groups.forEach((group) => {
+//   if (squad.value) {
+//     squad.value.groups.forEach((group) => {
 //       groupExpandedState.value[group.id] = true
 //     })
 //   }
@@ -111,22 +111,22 @@ function formatDate(dateString: string) {
 
 // Group accordion functions
 function expandAllGroups() {
-  if (!parche.value) return
-  parche.value.groups.forEach((group) => {
+  if (!squad.value) return
+  squad.value.groups.forEach((group) => {
     groupExpandedState.value[group.id] = true
   })
 }
 
 function collapseAllGroups() {
-  if (!parche.value) return
-  parche.value.groups.forEach((group) => {
+  if (!squad.value) return
+  squad.value.groups.forEach((group) => {
     groupExpandedState.value[group.id] = false
   })
 }
 
 // Group functions
 function handleAddGroup() {
-  if (!parche.value) return
+  if (!squad.value) return
   groupError.value = ''
 
   // Validate group name
@@ -140,11 +140,11 @@ function handleAddGroup() {
   const capitalizedName = capitalizeWords(trimmedName)
 
   // Get random unused color
-  const usedColors = parche.value.groups.map((g) => g.color)
+  const usedColors = squad.value.groups.map((g) => g.color)
   const color = newGroupColor.value || getRandomUnusedColor(usedColors)
 
   try {
-    const newGroup = parcheStore.addGroup(parche.value.id, capitalizedName, color)
+    const newGroup = squadStore.addGroup(squad.value.id, capitalizedName, color)
     // Set new group as expanded
     groupExpandedState.value[newGroup.id] = true
     showAddGroupModal.value = false
@@ -156,8 +156,8 @@ function handleAddGroup() {
 }
 
 function openEditGroup(groupId: string) {
-  if (!parche.value) return
-  const group = parche.value.groups.find((g) => g.id === groupId)
+  if (!squad.value) return
+  const group = squad.value.groups.find((g) => g.id === groupId)
   if (group) {
     selectedGroupId.value = groupId
     editGroupName.value = group.name
@@ -168,7 +168,7 @@ function openEditGroup(groupId: string) {
 }
 
 function handleEditGroup() {
-  if (!parche.value || !selectedGroupId.value) return
+  if (!squad.value || !selectedGroupId.value) return
   groupError.value = ''
 
   // Validate group name
@@ -182,7 +182,7 @@ function handleEditGroup() {
   const capitalizedName = capitalizeWords(trimmedName)
 
   try {
-    parcheStore.updateGroup(parche.value.id, selectedGroupId.value, {
+    squadStore.updateGroup(squad.value.id, selectedGroupId.value, {
       name: capitalizedName,
       color: editGroupColor.value,
     })
@@ -198,8 +198,8 @@ function confirmDeleteGroup(groupId: string) {
 }
 
 function handleDeleteGroup() {
-  if (!parche.value || !selectedGroupId.value) return
-  parcheStore.deleteGroup(parche.value.id, selectedGroupId.value)
+  if (!squad.value || !selectedGroupId.value) return
+  squadStore.deleteGroup(squad.value.id, selectedGroupId.value)
   selectedGroupId.value = null
 }
 
@@ -212,7 +212,7 @@ function openAddPerson(groupId: string) {
 }
 
 function handleAddPerson() {
-  if (!parche.value || !selectedGroupId.value) return
+  if (!squad.value || !selectedGroupId.value) return
   personError.value = ''
 
   // Validate person name
@@ -226,7 +226,7 @@ function handleAddPerson() {
   const capitalizedName = capitalizeWords(trimmedName)
 
   try {
-    parcheStore.addPerson(parche.value.id, selectedGroupId.value, capitalizedName)
+    squadStore.addPerson(squad.value.id, selectedGroupId.value, capitalizedName)
     showAddPersonModal.value = false
     newPersonName.value = ''
   } catch (error) {
@@ -235,8 +235,8 @@ function handleAddPerson() {
 }
 
 function openEditPerson(personId: string) {
-  if (!parche.value) return
-  const person = parche.value.groups.flatMap((g) => g.people).find((p) => p.id === personId)
+  if (!squad.value) return
+  const person = squad.value.groups.flatMap((g) => g.people).find((p) => p.id === personId)
   if (person) {
     selectedPersonId.value = personId
     editPersonName.value = person.name
@@ -246,7 +246,7 @@ function openEditPerson(personId: string) {
 }
 
 function handleEditPerson() {
-  if (!parche.value || !selectedPersonId.value) return
+  if (!squad.value || !selectedPersonId.value) return
   personError.value = ''
 
   // Validate person name
@@ -260,7 +260,7 @@ function handleEditPerson() {
   const capitalizedName = capitalizeWords(trimmedName)
 
   try {
-    parcheStore.updatePerson(parche.value.id, selectedPersonId.value, {
+    squadStore.updatePerson(squad.value.id, selectedPersonId.value, {
       name: capitalizedName,
     })
     showEditPersonModal.value = false
@@ -276,8 +276,8 @@ function openMovePerson(personId: string, groupId: string) {
 }
 
 function handleMovePerson(targetGroupId: string) {
-  if (!parche.value || !selectedPersonId.value) return
-  parcheStore.movePerson(parche.value.id, selectedPersonId.value, targetGroupId)
+  if (!squad.value || !selectedPersonId.value) return
+  squadStore.movePerson(squad.value.id, selectedPersonId.value, targetGroupId)
   showMovePersonModal.value = false
 }
 
@@ -287,18 +287,18 @@ function confirmDeletePerson(personId: string) {
 }
 
 function handleDeletePerson() {
-  if (!parche.value || !selectedPersonId.value) return
-  parcheStore.deletePerson(parche.value.id, selectedPersonId.value)
+  if (!squad.value || !selectedPersonId.value) return
+  squadStore.deletePerson(squad.value.id, selectedPersonId.value)
   selectedPersonId.value = null
 }
 
 async function shareAsText() {
-  if (!parche.value) return
+  if (!squad.value) return
 
-  let text = `💰 ${parche.value.name} - Expense Summary\n\n`
+  let text = `💰 ${squad.value.name} - Expense Summary\n\n`
 
-  parcheStore.currentParcheAllPeople.forEach((person) => {
-    const amount = parcheTotals.value.get(person.id) || 0
+  squadStore.currentSquadAllPeople.forEach((person) => {
+    const amount = squadTotals.value.get(person.id) || 0
     text += `${person.name}: ${formatCurrency(amount)}\n`
   })
 
@@ -322,22 +322,22 @@ async function shareAsText() {
 </script>
 
 <template>
-  <div v-if="parche" class="">
+  <div v-if="squad" class="">
     <!-- Main Content -->
     <main class="mx-auto grid min-h-full w-full max-w-7xl grid-rows-[auto_auto_1fr] px-4 py-6">
       <!-- Stats -->
       <div class="mb-6 flex gap-4 text-sm text-gray-600 dark:text-gray-400">
         <div class="flex items-center gap-1">
           <div class="i-lucide-users" />
-          <span>{{ parcheStore.currentParcheStats.totalPeople }} people</span>
+          <span>{{ squadStore.currentSquadStats.totalPeople }} people</span>
         </div>
         <div class="flex items-center gap-1">
           <div class="i-lucide-user-check" />
-          <span>{{ parcheStore.currentParcheStats.activePeople }} active</span>
+          <span>{{ squadStore.currentSquadStats.activePeople }} active</span>
         </div>
         <div class="flex items-center gap-1">
           <div class="i-lucide-receipt" />
-          <span>{{ parche.bills.length }} bills</span>
+          <span>{{ squad.bills.length }} bills</span>
         </div>
       </div>
       <!-- Tabs -->
@@ -397,7 +397,7 @@ async function shareAsText() {
         </div>
 
         <TransitionGroup name="list" tag="section" class="relative space-y-4">
-          <div v-for="group in parche.groups" :key="group.id" class="space-y-3">
+          <div v-for="group in squad.groups" :key="group.id" class="space-y-3">
             <BaseAccordion
               v-model="groupExpandedState[group.id]"
               :title="group.name"
@@ -411,7 +411,7 @@ async function shareAsText() {
                   />
                 </BaseButton>
                 <BaseButton
-                  v-if="parche.groups.length > 1"
+                  v-if="squad.groups.length > 1"
                   variant="ghost"
                   size="sm"
                   @click.stop="confirmDeleteGroup(group.id)"
@@ -438,7 +438,7 @@ async function shareAsText() {
                             ? 'border-green-500 bg-green-500'
                             : 'border-gray-300 bg-gray-300 dark:border-gray-600 dark:bg-gray-600',
                         ]"
-                        @click="parcheStore.togglePersonActive(parche.id, person.id)"
+                        @click="squadStore.togglePersonActive(squad.id, person.id)"
                       >
                         <div v-if="person.active" class="i-lucide-check text-sm text-white" />
                       </button>
@@ -481,13 +481,13 @@ async function shareAsText() {
       <!-- Bills Tab -->
       <div v-else-if="activeTab === 'bills'" class="space-y-4">
         <div class="flex justify-end">
-          <BaseButton @click="router.push({ name: 'bill-create', params: { id: parche.id } })">
+          <BaseButton @click="router.push({ name: 'bill-create', params: { id: squad.id } })">
             <div class="i-lucide-plus text-lg" />
             <span class="hidden sm:inline">New Bill</span>
           </BaseButton>
         </div>
 
-        <div v-if="parche.bills.length === 0" class="py-12 text-center">
+        <div v-if="squad.bills.length === 0" class="py-12 text-center">
           <div class="i-lucide-receipt mx-auto mb-3 text-5xl text-gray-300 dark:text-gray-600" />
           <p class="text-gray-500 dark:text-gray-400">No bills yet</p>
         </div>
@@ -497,7 +497,7 @@ async function shareAsText() {
           :key="bill.id"
           clickable
           @click="
-            router.push({ name: 'bill-detail', params: { parcheId: parche.id, billId: bill.id } })
+            router.push({ name: 'bill-detail', params: { squadId: squad.id, billId: bill.id } })
           "
         >
           <div class="flex items-start justify-between">
@@ -535,20 +535,20 @@ async function shareAsText() {
         <BaseCard>
           <h3 class="mb-4 text-lg font-semibold">Total Expenses</h3>
           <div
-            v-if="parcheStore.currentParcheAllPeople.length === 0"
+            v-if="squadStore.currentSquadAllPeople.length === 0"
             class="py-8 text-center text-gray-500 dark:text-gray-400"
           >
-            No people in this parche
+            No people in this squad
           </div>
           <div v-else class="space-y-3">
             <div
-              v-for="person in parcheStore.currentParcheAllPeople"
+              v-for="person in squadStore.currentSquadAllPeople"
               :key="person.id"
               class="flex items-center justify-between rounded-lg bg-gray-50 p-3 dark:bg-gray-700"
             >
               <span class="font-medium">{{ person.name }}</span>
               <span class="text-lg font-bold text-blue-600 dark:text-blue-400">
-                {{ formatCurrency(parcheTotals.get(person.id) || 0) }}
+                {{ formatCurrency(squadTotals.get(person.id) || 0) }}
               </span>
             </div>
           </div>
@@ -661,7 +661,7 @@ async function shareAsText() {
       <div class="space-y-2">
         <p class="mb-4 text-sm text-gray-600 dark:text-gray-400">Select target group:</p>
         <BaseButton
-          v-for="group in parche.groups.filter((g: Group) => g.id !== selectedGroupId)"
+          v-for="group in squad.groups.filter((g: Group) => g.id !== selectedGroupId)"
           :key="group.id"
           variant="ghost"
           full-width

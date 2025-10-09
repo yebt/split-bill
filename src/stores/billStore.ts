@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { Bill, Product, BillType } from '@/types/domain'
 import { billRepository } from '@/repositories/billRepository'
-import { useParcheStore } from './parcheStore'
+import { useSquadStore } from './squadStore'
 
 export const useBillStore = defineStore('bill', () => {
   // State
@@ -24,16 +24,16 @@ export const useBillStore = defineStore('bill', () => {
     return billRepository.calculateBillSplit(currentBillId.value)
   })
 
-  const currentParcheBills = computed(() => {
-    const parcheStore = useParcheStore()
-    if (!parcheStore.currentParcheId) return []
-    return billRepository.findByParcheId(parcheStore.currentParcheId)
+  const currentSquadBills = computed(() => {
+    const squadStore = useSquadStore()
+    if (!squadStore.currentSquadId) return []
+    return billRepository.findBySquadId(squadStore.currentSquadId)
   })
 
-  const currentParcheTotals = computed(() => {
-    const parcheStore = useParcheStore()
-    if (!parcheStore.currentParcheId) return new Map()
-    return billRepository.calculateParcheTotals(parcheStore.currentParcheId)
+  const currentSquadTotals = computed(() => {
+    const squadStore = useSquadStore()
+    if (!squadStore.currentSquadId) return new Map()
+    return billRepository.calculateSquadTotals(squadStore.currentSquadId)
   })
 
   // Actions
@@ -41,21 +41,21 @@ export const useBillStore = defineStore('bill', () => {
     currentBillId.value = id
   }
 
-  function createBill(parcheId: string, type: BillType): Bill {
-    const bill = billRepository.createBill(parcheId, type)
-    // Reload parche to update bills
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+  function createBill(squadId: string, type: BillType): Bill {
+    const bill = billRepository.createBill(squadId, type)
+    // Reload squad to update bills
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
     return bill
   }
 
   function updateBill(
     billId: string,
-    updates: Partial<Omit<Bill, 'id' | 'parcheId' | 'createdAt'>>,
+    updates: Partial<Omit<Bill, 'id' | 'squadId' | 'createdAt'>>,
   ) {
     billRepository.updateBill(billId, updates)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   function deleteBill(billId: string) {
@@ -63,40 +63,40 @@ export const useBillStore = defineStore('bill', () => {
     if (currentBillId.value === billId) {
       currentBillId.value = null
     }
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   // Product actions
   function addProduct(billId: string, name: string, quantity: number, price: number): Product {
     const product = billRepository.addProduct(billId, name, quantity, price)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
     return product
   }
 
   function updateProduct(billId: string, productId: string, updates: Partial<Omit<Product, 'id'>>) {
     billRepository.updateProduct(billId, productId, updates)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   function deleteProduct(billId: string, productId: string) {
     billRepository.deleteProduct(billId, productId)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   function assignProductToPerson(billId: string, productId: string, personId: string) {
     billRepository.assignProductToPerson(billId, productId, personId)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   function unassignProductFromPerson(billId: string, productId: string, personId: string) {
     billRepository.unassignProductFromPerson(billId, productId, personId)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   function toggleProductAssignment(billId: string, productId: string, personId: string) {
@@ -116,14 +116,14 @@ export const useBillStore = defineStore('bill', () => {
   // Exoneration actions
   function exoneratePerson(billId: string, personId: string) {
     billRepository.exoneratePerson(billId, personId)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   function unexoneratePerson(billId: string, personId: string) {
     billRepository.unexoneratePerson(billId, personId)
-    const parcheStore = useParcheStore()
-    parcheStore.loadParches()
+    const squadStore = useSquadStore()
+    squadStore.loadSquads()
   }
 
   function toggleExoneration(billId: string, personId: string) {
@@ -146,8 +146,8 @@ export const useBillStore = defineStore('bill', () => {
     return billRepository.calculateBillSplit(billId)
   }
 
-  function getParcheTotals(parcheId: string): Map<string, number> {
-    return billRepository.calculateParcheTotals(parcheId)
+  function getSquadTotals(squadId: string): Map<string, number> {
+    return billRepository.calculateSquadTotals(squadId)
   }
 
   return {
@@ -157,8 +157,8 @@ export const useBillStore = defineStore('bill', () => {
     currentBill,
     currentBillTotal,
     currentBillSplit,
-    currentParcheBills,
-    currentParcheTotals,
+    currentSquadBills,
+    currentSquadTotals,
     // Actions
     setCurrentBill,
     createBill,
@@ -175,6 +175,6 @@ export const useBillStore = defineStore('bill', () => {
     toggleExoneration,
     getBillTotal,
     getBillSplit,
-    getParcheTotals,
+    getSquadTotals,
   }
 })

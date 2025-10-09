@@ -4,13 +4,13 @@
 
 export interface Person {
   id: string
-  name: string // unique per parche
+  name: string // unique per squad
   active: boolean
 }
 
 export interface Group {
   id: string
-  name: string // unique per parche
+  name: string // unique per squad
   color: string
   people: Person[]
 }
@@ -27,14 +27,14 @@ export type BillType = 'equal' | 'distributed'
 
 export interface Bill {
   id: string
-  parcheId: string
+  squadId: string
   type: BillType
   products: Product[]
   exoneratedPeople: string[] // person IDs
   createdAt: string // ISO date string
 }
 
-export interface Parche {
+export interface Squad {
   id: string
   name: string // unique globally
   groups: Group[]
@@ -57,8 +57,8 @@ export interface BillSummary {
   createdAt: string
 }
 
-export interface ParcheSummary {
-  parcheId: string
+export interface SquadSummary {
+  squadId: string
   totalSpent: number
   billCount: number
   personDebts: Map<string, number> // personId -> total debt

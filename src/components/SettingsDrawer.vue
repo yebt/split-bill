@@ -2,7 +2,7 @@
 import { ref, watch, onUnmounted } from 'vue'
 import { useThemeStore } from '@/stores/themeStore'
 import { useSettingsStore } from '@/stores/settingsStore'
-import { useParcheStore } from '@/stores/parcheStore'
+import { useSquadStore } from '@/stores/squadStore'
 import BaseButton from '@/components/BaseButton.vue'
 import BaseModal from '@/components/BaseModal.vue'
 import BaseInput from '@/components/BaseInput.vue'
@@ -18,7 +18,7 @@ const emit = defineEmits<{
 
 const themeStore = useThemeStore()
 const settingsStore = useSettingsStore()
-const parcheStore = useParcheStore()
+const squadStore = useSquadStore()
 
 // Currency settings
 const currencies = [
@@ -84,7 +84,7 @@ function handleSaveToken() {
 }
 
 function handleExport() {
-  const data = parcheStore.exportData()
+  const data = squadStore.exportData()
   const blob = new Blob([data], { type: 'application/json' })
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
@@ -107,7 +107,7 @@ function handleImportFile(event: Event) {
   reader.onload = (e) => {
     try {
       const data = e.target?.result as string
-      parcheStore.importData(data)
+      squadStore.importData(data)
       alert('Data imported successfully!')
     } catch (error) {
       alert('Failed to import data: ' + (error instanceof Error ? error.message : 'Unknown error'))
@@ -344,7 +344,7 @@ function handleResetSettings() {
   <ConfirmDialog
     v-model="showResetConfirm"
     title="Restablecer Configuración"
-    message="¿Estás seguro de que deseas restablecer toda la configuración a los valores predeterminados? Esto no eliminará tus parches ni facturas."
+    message="¿Estás seguro de que deseas restablecer toda la configuración a los valores predeterminados? Esto no eliminará tus squads ni facturas."
     confirm-text="Restablecer"
     confirm-variant="danger"
     @confirm="handleResetSettings"
