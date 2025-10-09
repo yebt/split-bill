@@ -17,7 +17,7 @@
     "lint:eslint": "eslint . --fix",
     "lint": "run-s lint:*",
     "format": "prettier --write src/",
-    "surge": "surge ./dist"
+    "surge": "surge ./dist $(cat CNAME)"
   },
   "dependencies": {
     "@unhead/vue": "^2.0.17",
