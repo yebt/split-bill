@@ -6,18 +6,18 @@ The application is now running at **http://localhost:5173**
 
 ## Quick Start Tutorial
 
-### 1. Create Your First Parche
-1. Click **"Create Parche"** on the home screen
+### 1. Create Your First Squad
+1. Click **"Create Squad"** on the home screen
 2. Enter a name like "Weekend Trip" or "Dinner Party"
 3. Click **Create**
 
 ### 2. Add Groups and People
-1. Open your parche
+1. Open your squad
 2. In the **"People & Groups"** tab:
    - Click **"Add Group"** to create groups (e.g., "Friends", "Family")
    - Choose a color for each group
    - Click the **"Add Person"** button within a group
-   - Add people's names (must be unique within the parche)
+   - Add people's names (must be unique within the squad)
 
 ### 3. Manage People
 - **Toggle Active/Inactive**: Click the green/gray circle next to a person's name
@@ -66,8 +66,8 @@ The application is now running at **http://localhost:5173**
 - Select a previously exported JSON file
 - All data will be restored
 
-#### Duplicate a Parche
-1. On the home screen, click the **three dots** on a parche card
+#### Duplicate a Squad
+1. On the home screen, click the **three dots** on a squad card
 2. Select **"Duplicate"**
 3. Enter a new name
 4. Groups and people are copied, but bills are not
@@ -91,7 +91,7 @@ The application is now running at **http://localhost:5173**
 
 ## Tips & Tricks
 
-1. **Unique Names**: Person names must be unique within a parche to avoid confusion
+1. **Unique Names**: Person names must be unique within a squad to avoid confusion
 2. **Active/Inactive**: Mark people as inactive instead of deleting them to preserve bill history
 3. **Exoneration**: Use exoneration for people who were present but didn't consume anything
 4. **Distributed Bills**: Great for restaurants where people ordered different items

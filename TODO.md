@@ -3,7 +3,7 @@
 - [x] ~~auto capitalize names of groups~~
 - [x] ~~add some view transitions.~~
 - [x] ~~the binding in bills is interpolated~~
-- [x] ~~responsive buttons in parche~~
+- [x] ~~responsive buttons in squad~~
 - [x] Put icons in the modal of creation to fastly understand what i edit or create
 - [-] Decrease the view transition time
 - [x] Add group transitions when add and remove elements (resalt briefly the new entity)

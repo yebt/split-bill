@@ -4,7 +4,7 @@ A mobile-first progressive web application for splitting bills among friends in 
 
 ## ✨ Features
 
-- **Parche Management**: Create and manage groups of friends for different social contexts
+- **Squad Management**: Create and manage groups of friends for different social contexts
 - **Bill Splitting**: Equal split or distributed (itemized) modes
 - **Real-time Calculations**: Automatic calculation of who owes what
 - **Dark/Light Mode**: Automatic theme detection with manual toggle

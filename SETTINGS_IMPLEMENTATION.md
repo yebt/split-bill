@@ -44,8 +44,8 @@ The settings implementation was refactored from a dedicated view to a slide-in d
 - Settings drawer state management
 
 ### 5. All Views Updated
-- **ParcheListView**: Removed header, uses navbar config
-- **ParcheDetailView**: Removed header, configures navbar with parche name and back button
+- **SquadListView**: Removed header, uses navbar config
+- **SquadDetailView**: Removed header, configures navbar with squad name and back button
 - **BillCreateView**: Removed header, configures navbar with "New Bill" title
 - **BillDetailView**: Removed header, moved bill info to content area
 - All views use inject to configure navbar dynamically
@@ -82,7 +82,7 @@ The following currencies are available:
 - Security notice about local storage
 
 ### Data Management
-- **Export**: Download all parches and bills as JSON
+- **Export**: Download all squads and bills as JSON
 - **Import**: Load data from JSON file
 - Moved from header to settings for better organization
 
@@ -97,7 +97,7 @@ The following currencies are available:
 3. **Centralized Configuration**: All settings in one place
 4. **Better Organization**: Grouped by category with icons
 5. **Consistent Navigation**: Unified navbar across all views
-6. **Dynamic Titles**: Navbar adapts to current context (parche name, bill details, etc.)
+6. **Dynamic Titles**: Navbar adapts to current context (squad name, bill details, etc.)
 7. **Security**: Password-style input for API token with visibility toggle
 8. **Helpful Links**: Direct link to Google AI Studio for token generation
 9. **Safety**: Reset confirmation dialog to prevent accidental data loss

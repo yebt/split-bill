@@ -2,22 +2,22 @@
 
 ## Overview
 
-This application manages groups of friends (“parches”), splits bills, and tracks expenses in social gatherings.  
+This application manages groups of friends (“squads”), splits bills, and tracks expenses in social gatherings.  
 The goal is to make splitting costs easier and reduce mistakes in group settings.
 
 - **Mobile first** design, but should work well on both mobile and desktop.
 - Works fully **offline** using `localStorage` (or `IndexedDB` in the future).
 - **No login and no backend**. Everything is local to the device.
 - Supports **import/export** of data across devices.
-- Users can **duplicate a parche** to avoid rebuilding from scratch.
+- Users can **duplicate a squad** to avoid rebuilding from scratch.
 
 ---
 
 ## Domain Model
 
-### Parche
+### Squad
 
-A “parche” represents a social context (e.g., a trip, a dinner).
+A “squad” represents a social context (e.g., a trip, a dinner).
 
 - Always contains **at least one group** by default.
 - Has a **unique name** across the entire application.
@@ -30,9 +30,9 @@ A “parche” represents a social context (e.g., a trip, a dinner).
 
 ### Group
 
-A group belongs to a single parche.
+A group belongs to a single squad.
 
-- The **group name is unique inside its parche** but may be reused in other parches.
+- The **group name is unique inside its squad** but may be reused in other squads.
 - Each group can have a color to distinguish them in the UI.
 - Colors: start with a predefined palette, allow adding custom colors if needed.
 - Attributes:
@@ -43,20 +43,20 @@ A group belongs to a single parche.
 
 ### Person
 
-A person always belongs to a group inside a parche.
+A person always belongs to a group inside a squad.
 
-- The **name of a person must be unique inside the parche**, avoiding duplicates in large groups.
-- A person can exist in multiple parches with no restriction.
-- A person can be active or inactive in a parche. Inactive people don’t participate in bill splits.
-- A person can be moved between groups inside the same parche.
+- The **name of a person must be unique inside the squad**, avoiding duplicates in large groups.
+- A person can exist in multiple squads with no restriction.
+- A person can be active or inactive in a squad. Inactive people don’t participate in bill splits.
+- A person can be moved between groups inside the same squad.
 - Attributes:
   - `id`
-  - `name` (unique per parche)
+  - `name` (unique per squad)
   - `active` (boolean)
 
 ### Bill
 
-A bill belongs to a parche.
+A bill belongs to a squad.
 
 - There are **two bill types**:
   - **Equal** → splits the total evenly among active participants, excluding exonerated people.
@@ -64,10 +64,10 @@ A bill belongs to a parche.
 - A person can be **exonerated per bill** (temporary, not permanent).
 - Bills support **shared products** (a single product can be split across multiple people).
 - Decimal handling → amounts are rounded to the nearest decimal, not necessarily integers.
-- Bills are saved and visible in the history of the parche.
+- Bills are saved and visible in the history of the squad.
 - Attributes:
   - `id`
-  - `parcheId`
+  - `squadId`
   - `type` (equal | distributed)
   - `products[]`
   - `exoneratedPeople[]`
@@ -89,21 +89,21 @@ Represents an item in a bill.
 
 ## Features
 
-### F1 - Parche, Groups, and People Management
+### F1 - Squad, Groups, and People Management
 
-- CRUD parches (create, list, edit, delete).
-- Duplicate parche (copies groups and people, no bills).
-- CRUD groups within a parche.
+- CRUD squads (create, list, edit, delete).
+- Duplicate squad (copies groups and people, no bills).
+- CRUD groups within a squad.
 - CRUD people within a group.
-- Mark people as active/inactive per parche.
+- Mark people as active/inactive per squad.
 - Move people between groups.
-- Counters at parche level:
+- Counters at squad level:
   - Total people.
   - Active people.
 
 ### F2 - Bills Management
 
-- Create bills inside a parche.
+- Create bills inside a squad.
 - Two modes of splitting:
   - Equal.
   - Distributed.
@@ -116,7 +116,7 @@ Represents an item in a bill.
 
 ### Reporting
 
-- Bill summary per parche.
+- Bill summary per squad.
 - Show who owes how much.
 - Export/share results to WhatsApp in:
   - Text format (copy-paste friendly).
@@ -131,7 +131,7 @@ Represents an item in a bill.
 - Custom modal component (no native confirm).
 - Optimized UX/UI (clear colors and flows).
 - Local storage persistence with **Repository Pattern** to allow future DB migration.
-- Import/export parches and bills (e.g., JSON file).
+- Import/export squads and bills (e.g., JSON file).
 - Real-time calculation for bill splitting.
 
 ---

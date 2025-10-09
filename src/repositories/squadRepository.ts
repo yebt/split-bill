@@ -3,8 +3,26 @@ import type { Squad, Group, Person } from '@/types/domain'
 import { storage } from './storage'
 
 const SQUADS_KEY = 'squads'
+const OLD_PARCHES_KEY = 'parches' // For migration
 
 export class SquadRepository {
+  constructor() {
+    this.migrateFromParches()
+  }
+
+  private migrateFromParches(): void {
+    // Check if old data exists and new data doesn't
+    const oldData = storage.get<Squad[]>(OLD_PARCHES_KEY)
+    const newData = storage.get<Squad[]>(SQUADS_KEY)
+    
+    if (oldData && !newData) {
+      // Migrate old data to new key
+      storage.set(SQUADS_KEY, oldData)
+      storage.remove(OLD_PARCHES_KEY)
+      console.log('Migrated data from "parches" to "squads"')
+    }
+  }
+
   private getAll(): Squad[] {
     return storage.get<Squad[]>(SQUADS_KEY) || []
   }

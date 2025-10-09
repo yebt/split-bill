@@ -7,7 +7,7 @@ The Split Bill application has been successfully built and is running at **http:
 ## What Was Built
 
 ### 1. Domain Models & Types (`src/types/domain.ts`)
-- **Parche**: Social context containing groups and bills
+- **Squad**: Social context containing groups and bills
 - **Group**: Collection of people with color identification
 - **Person**: Individual with active/inactive status
 - **Bill**: Expense record with two types (equal/distributed)
@@ -17,9 +17,9 @@ The Split Bill application has been successfully built and is running at **http:
 ### 2. Repository Pattern (`src/repositories/`)
 - **storage.ts**: Abstract storage interface for future DB migration
 - **LocalStorageAdapter**: Current implementation using browser localStorage
-- **parcheRepository.ts**: Full CRUD for parches, groups, and people
+- **squadRepository.ts**: Full CRUD for squads, groups, and people
   - Create, read, update, delete operations
-  - Duplicate parche functionality
+  - Duplicate squad functionality
   - Move people between groups
   - Import/export data
 - **billRepository.ts**: Bill and product management
@@ -30,14 +30,14 @@ The Split Bill application has been successfully built and is running at **http:
   - Calculate bill splits and totals
 
 ### 3. State Management (`src/stores/`)
-- **parcheStore.ts**: Manages parches, groups, and people state
-  - Reactive computed properties for current parche
+- **squadStore.ts**: Manages squads, groups, and people state
+  - Reactive computed properties for current squad
   - Statistics (total people, active people, group count)
   - All CRUD operations exposed as actions
 - **billStore.ts**: Manages bills and calculations
   - Real-time bill total calculations
   - Split calculations for equal and distributed modes
-  - Parche-level totals aggregation
+  - Squad-level totals aggregation
 - **themeStore.ts**: Dark/light mode management
   - System preference detection
   - Manual toggle
@@ -53,16 +53,16 @@ The Split Bill application has been successfully built and is running at **http:
 
 ### 5. Views (`src/views/`)
 
-#### ParcheListView.vue
-- List all parches with statistics
-- Create new parche
-- Duplicate parche (copies groups/people, not bills)
-- Delete parche with confirmation
+#### SquadListView.vue
+- List all squads with statistics
+- Create new squad
+- Duplicate squad (copies groups/people, not bills)
+- Delete squad with confirmation
 - Import/export data (JSON)
 - Empty state with call-to-action
 - Theme toggle
 
-#### ParcheDetailView.vue
+#### SquadDetailView.vue
 - Three tabs: People & Groups, Bills, Summary
 - **People & Groups Tab**:
   - Display groups with color indicators
@@ -99,10 +99,10 @@ The Split Bill application has been successfully built and is running at **http:
 - Delete bill with confirmation
 
 ### 6. Routing (`src/router/index.ts`)
-- `/` - Parche list (home)
-- `/parche/:id` - Parche detail
-- `/parche/:id/bill/new` - Create bill
-- `/parche/:parcheId/bill/:billId` - Bill detail
+- `/` - Squad list (home)
+- `/squad/:id` - Squad detail
+- `/squad/:id/bill/new` - Create bill
+- `/squad/:squadId/bill/:billId` - Bill detail
 
 ### 7. Styling
 - **UnoCSS** with Tailwind CSS utilities (wind4 preset)
@@ -114,7 +114,7 @@ The Split Bill application has been successfully built and is running at **http:
 ## Key Features Implemented
 
 ### Core Functionality
-✅ Parche CRUD operations
+✅ Squad CRUD operations
 ✅ Group management with colors
 ✅ People management (add, edit, delete, move, activate/deactivate)
 ✅ Bill creation with two split modes
@@ -179,17 +179,17 @@ src/
 │   └── ConfirmDialog.vue
 ├── repositories/             # Data access layer
 │   ├── storage.ts
-│   ├── parcheRepository.ts
+│   ├── squadRepository.ts
 │   └── billRepository.ts
 ├── stores/                   # State management
-│   ├── parcheStore.ts
+│   ├── squadStore.ts
 │   ├── billStore.ts
 │   └── themeStore.ts
 ├── types/                    # TypeScript definitions
 │   └── domain.ts
 ├── views/                    # Page components
-│   ├── ParcheListView.vue
-│   ├── ParcheDetailView.vue
+│   ├── SquadListView.vue
+│   ├── SquadDetailView.vue
 │   ├── BillCreateView.vue
 │   └── BillDetailView.vue
 ├── router/
@@ -213,7 +213,7 @@ src/
 ## Testing
 
 ### Manual Testing Checklist
-- ✅ Create parche
+- ✅ Create squad
 - ✅ Add groups with colors
 - ✅ Add people to groups
 - ✅ Toggle people active/inactive
@@ -226,8 +226,8 @@ src/
 - ✅ Share as text
 - ✅ Export data
 - ✅ Import data
-- ✅ Duplicate parche
-- ✅ Delete parche
+- ✅ Duplicate squad
+- ✅ Delete squad
 - ✅ Delete bill
 - ✅ Dark/light mode toggle
 - ✅ Mobile responsive design
@@ -303,7 +303,7 @@ bun run test:unit    # Run unit tests (when added)
 
 The Split Bill application is **fully functional** and ready for use. All features from the AGENT.md specification have been implemented:
 
-- ✅ Parche, Groups, and People Management (F1)
+- ✅ Squad, Groups, and People Management (F1)
 - ✅ Bills Management (F2)
 - ✅ Reporting and sharing
 - ✅ Mobile-first design
